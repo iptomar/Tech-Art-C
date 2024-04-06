@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (count($gestores) > 0) {
             $sqlinsert2 = "";
             foreach ($gestores as $id2) {
-                $sqlinsert2 = "($id2,last_insert_id()),";
+                $sqlinsert2 = $sqlinsert2 . "($id2,last_insert_id()),";
             }
             $sqlinsert2 = rtrim($sqlinsert2, ",");
             $sql2 = "INSERT INTO gestores_projetos (gestor_id,projetos_id) VALUES" . $sqlinsert2;

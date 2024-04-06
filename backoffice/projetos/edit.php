@@ -18,6 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $site = $_POST["site"];
     $facebook = $_POST["facebook"];
     $investigadores = [];
+    $gestores = [];
     $nome_en = $_POST["nome_en"];
     $descricao_en = $_POST["descricao_en"];
     $sobreprojeto_en = $_POST["sobreprojeto_en"];
@@ -29,6 +30,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $facebook_en = $_POST["facebook_en"];
     if (isset($_POST["investigadores"])) {
         $investigadores = $_POST["investigadores"];
+    }
+    if (isset($_POST["gestores"])) {
+        $gestores = $_POST["gestores"];
     }
     $fotografia_exists = isset($_FILES["fotografia"]) && $_FILES["fotografia"]["size"] != 0;
 
@@ -52,24 +56,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     if (mysqli_stmt_execute($stmt)) {
-        if (count($investigadores) == 0) {
-            header('Location: index.php');
-            return;
+        if (count($investigadores) > 0) {
+            $sqlinsert = "";
+            foreach ($investigadores as $investigadorid) {
+                $sqlinsert = $sqlinsert . "($investigadorid,$id),";
+            }
+            $sqlinsert = rtrim($sqlinsert, ",");
+            $sql = "DELETE FROM investigadores_projetos WHERE projetos_id = " . $id;
+            mysqli_query($conn, $sql);
+            $sql = "INSERT INTO investigadores_projetos (investigadores_id,projetos_id) values" . $sqlinsert;
+            print_r($sql);
+            if (!mysqli_query($conn, $sql)) {
+                echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+                exit;
+            }
         }
-        $sqlinsert = "";
-        foreach ($investigadores as $investigadorid) {
-            $sqlinsert = $sqlinsert . "($investigadorid,$id),";
+        if (count($gestores) > 0) {
+            $sqlinsert2 = "";
+            foreach ($gestores as $gestoresid) {
+                $sqlinsert2 = $sqlinsert2 . "($gestoresid,$id),";
+            }
+            $sqlinsert2 = rtrim($sqlinsert2, ",");
+            $sql2 = "DELETE FROM gestores_projetos WHERE projetos_id = " . $id;
+            mysqli_query($conn, $sql2);
+            $sql2 = "INSERT INTO gestores_projetos (gestor_id,projetos_id) values" . $sqlinsert2;
+            print_r($sql);
+            if (!mysqli_query($conn, $sql2)) {
+                echo "Error: " . $sql2 . "<br>" . mysqli_error($conn);
+                exit;
+            }
         }
-        $sqlinsert = rtrim($sqlinsert, ",");
-        $sql = "DELETE FROM investigadores_projetos WHERE projetos_id = " . $id;
-        mysqli_query($conn, $sql);
-        $sql = "INSERT INTO investigadores_projetos (investigadores_id,projetos_id) values" . $sqlinsert;
-        print_r($sql);
-        if (mysqli_query($conn, $sql)) {
-            header('Location: index.php');
-        } else {
-            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-        }
+        header('Location: index.php');
         exit;
     } else {
         echo "Error: " . $sql . mysqli_error($conn);
@@ -376,34 +393,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                     </div>
 
-                <div class="col">
-                <div class="form-group">
-                    <label>Investigadores/as</label><br>
-                    <?php
-                    $sql = "SELECT investigadores_id FROM investigadores_projetos WHERE projetos_id = " . $id;
-                    $result = mysqli_query($conn, $sql);
-                    $selected = array();
-                    if (mysqli_num_rows($result) > 0) {
-                        while (($row =  mysqli_fetch_assoc($result))) {
-                            $selected[] = $row['investigadores_id'];
-                        }
-                    }
-                    $sql = "SELECT id, nome, tipo FROM investigadores 
-                            ORDER BY CASE WHEN tipo = 'Externo' THEN 1 ELSE 0 END, tipo, nome;";
-                    $result = mysqli_query($conn, $sql);
-                    if (mysqli_num_rows($result) > 0) {
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            if ($row["id"] == $_SESSION["autenticado"]) {
-                                echo "<input type='hidden' name='investigadores[]' value='" . $row["id"] . "'/>";
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Gestores/as</label><br>
+                            <?php
+                            $sql = "SELECT gestor_id FROM gestores_projetos WHERE projetos_id = " . $id;
+                            $result = mysqli_query($conn, $sql);
+                            $selected = array();
+                            if (mysqli_num_rows($result) > 0) {
+                                while (($row =  mysqli_fetch_assoc($result))) {
+                                    $selected[] = $row['gestor_id'];
+                                }
+                            }
+                            $sql = "SELECT id, nome, tipo FROM investigadores 
+                                    ORDER BY CASE WHEN tipo = 'Externo' THEN 1 ELSE 0 END, tipo, nome;";
+                            $result = mysqli_query($conn, $sql);
+                            if (mysqli_num_rows($result) > 0) {
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    if ($row["id"] == $_SESSION["autenticado"]) {
+                                        echo "<input type='hidden' name='gestores[]' value='" . $row["id"] . "'/>";
+                                    } ?>
+                                    <input type="checkbox" <?= in_array($row["id"], $selected) || $row["id"] == $_SESSION["autenticado"] ? "checked" : "" ?> <?= $row["id"] == $_SESSION["autenticado"] ? "disabled" : "" ?> name="gestores[]" value="<?= $row["id"] ?>">
+                                    <label><?= $row["tipo"] . " - " .  $row["nome"] ?></label><br>
+                            <?php }
                             } ?>
-                            <input type="checkbox" <?= in_array($row["id"], $selected) || $row["id"] == $_SESSION["autenticado"] ? "checked" : "" ?> <?= $row["id"] == $_SESSION["autenticado"] ? "disabled" : "" ?> name="investigadores[]" value="<?= $row["id"] ?>">
-                            <label><?= $row["tipo"] . " - " .  $row["nome"] ?></label><br>
-                    <?php }
-                    } ?>
-                    <!-- Error -->
+                            <!-- Error -->
 
-                </div>
-                </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">
