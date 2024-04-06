@@ -4,8 +4,19 @@ include 'models/functions.php';
 
 $pdo = pdo_connect_mysql();
 $language = ($_SESSION["lang"] == "en") ? "_en" : "";
-$query = "SELECT id,COALESCE(NULLIF(nome{$language}, ''), nome) AS nome,fotografia FROM projetos WHERE concluido=true";
-$stmt = $pdo->prepare($query);
+
+// Check if search query is provided
+$search_query = isset($_GET['search']) ? $_GET['search'] : '';
+
+// Prepare the SQL query based on the search query
+$query = "SELECT id, COALESCE(NULLIF(nome{$language}, ''), nome) AS nome, fotografia FROM projetos WHERE concluido=true";
+if (!empty($search_query)) {
+    $query .= " AND (nome LIKE :search_query)";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindValue(':search_query', '%' . $search_query . '%', PDO::PARAM_STR);
+} else {
+    $stmt = $pdo->prepare($query);
+}
 $stmt->execute();
 $projetos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -38,6 +49,21 @@ $projetos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <section class="product_section layout_padding">
    <div style="padding-top: 20px;">
       <div class="container">
+         <!-- Search Bar -->
+         <form method="GET">
+            <div class="row justify-content-center">
+               <div class="col-md-6 mb-3">
+                  <div class="input-group">
+                     <input type="text" class="form-control" placeholder="Search projects..." name="search" value="<?= $search_query ?>">
+                     <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">Search</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </form>
+         <!-- End of Search Bar -->
+
          <div class="row justify-content-center mt-3">
 
             <?php foreach ($projetos as $projeto) : ?>
