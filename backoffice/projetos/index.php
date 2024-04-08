@@ -38,8 +38,8 @@ $result_gestores = mysqli_query($conn, $sql2);
     ?>
 </style>
 
-<div class="container-xl">
-    <div class="container-xl">
+
+    <div class="px-5">
         <div class="table-responsive">
             <!-- Add search bar here -->
             <div class="input-group mb-3">
@@ -118,7 +118,7 @@ $result_gestores = mysqli_query($conn, $sql2);
             </div>
         </div>
     </div>
-</div>
+
 
 <script>
     $(document).ready(function(){
