@@ -4,15 +4,71 @@ include 'models/functions.php';
 
 $pdo = pdo_connect_mysql();
 $language = ($_SESSION["lang"] == "en") ? "_en" : "";
-$query = "SELECT id, email, nome,
-        COALESCE(NULLIF(sobre{$language}, ''), sobre) AS sobre,
-        COALESCE(NULLIF(areasdeinteresse{$language}, ''), areasdeinteresse) AS areasdeinteresse,
-        ciencia_id, tipo, fotografia, orcid, scholar, research_gate, scopus_id
-        FROM investigadores WHERE tipo = \"Integrado\" ORDER BY nome";
-$stmt = $pdo->prepare($query);
-$stmt->execute();
+
+// variaveis da página
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+// numero de registos por pagina
+$records_per_page = 9; 
+
+// Calcular o limite da query 
+$limit = ($page - 1) * $records_per_page;
+
+// Query para buscar os integrados
+$query = "SELECT id, email, nome, 
+            COALESCE(NULLIF(sobre{$language}, ''), sobre) AS sobre, 
+            COALESCE(NULLIF(areasdeinteresse{$language}, ''), areasdeinteresse) 
+            AS areasdeinteresse, ciencia_id, tipo, fotografia, orcid, scholar, research_gate, scopus_id 
+            FROM investigadores WHERE tipo = \"Integrado\" ORDER BY nome LIMIT $limit, $records_per_page";
+$stmt = $pdo->query($query);
 $investigadores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Buscar o numero total de integrados
+$total_investigadores_query = "SELECT COUNT(*) AS total FROM investigadores WHERE tipo = \"Integrado\"";
+$total_stmt = $pdo->query($total_investigadores_query);
+$total_investigadores = $total_stmt->fetch(PDO::FETCH_ASSOC)['total'];
+
+// Calcular o toral de páginas
+$total_pages = ceil($total_investigadores / $records_per_page);
+
 ?>
+
+<style>
+   
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.pagination {
+  display: inline-block;
+}
+
+.pagination-link {
+  display: inline-block;
+  padding: 8px 12px;
+  margin: 0 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.pagination-link.active {
+  background-color: #333F50;
+  color: #fff;
+  border-color: #333F50;
+}
+
+.pagination-link:hover {
+  background-color: #5f728c;
+  color: #fff;
+  border-color: #5f728c;
+}
+
+</style>
 
 <!DOCTYPE html>
 <html>
@@ -131,9 +187,27 @@ $investigadores = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
    </section>
 
-      <!-- end product section -->
+   <!-- end product section -->
 
-      <?=template_footer();?>
+   <!-- pagination section-->
+   <section class="pagination-container">
+      <div class="pagination">
+         <?php if ($page > 1) : ?>
+            <a href="?page=<?= $page - 1 ?>" class="pagination-link">&laquo; Anterior</a>
+         <?php endif; ?>
+
+         <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
+            <a href="?page=<?= $i ?>" class="pagination-link <?= ($page == $i) ? 'active' : '' ?>"><?= $i ?></a>
+         <?php endfor; ?>
+
+         <?php if ($page < $total_pages) : ?>
+            <a href="?page=<?= $page + 1 ?>" class="pagination-link">Seguinte &raquo;</a>
+         <?php endif; ?>
+      </div>
+   </section>
+<!-- end pagination section-->
+
+   <?=template_footer();?>
 
    </body>
 </html>
