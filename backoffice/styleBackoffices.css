@@ -253,34 +253,9 @@ table.table .avatar {
 }
 
 .modal .form-control {
-	border: 2px solid #000;
-    padding: 0.375rem 0.75rem;
-    border-radius: 0.25rem 0 0 0.25rem;
-}
-
-.modal .searchInput {
-	background-color: #fff; 
-    border: 2px solid #000; 
-    padding: 0.375rem 0.75rem; 
-    border-radius: 0.25rem 0 0 0.25rem;
-}
-
-.modal .searchButton {
-	background-color: #435d7d; 
-	color: #fff; 
-	border: 1px solid #435d7d; 
-	border-left: none;
-	border-radius: 0 3px 3px 0; 
-	padding: 8px 12px; 
-}
-
-.modal .searchButton:hover {
-	background-color: #34495e; 
-	border-color: #34495e; 
-}
-
-.modal .searchButton i.fa {
-		color: #000;
+	border-radius: 2px;
+	box-shadow: none;
+	border-color: #dddddd;
 }
 
 .modal textarea.form-control {
