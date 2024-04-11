@@ -7,12 +7,33 @@ $mainDir = "../assets/projetos/";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = $_POST["id"];
-    $sql = "DELETE FROM investigadores_projetos WHERE projetos_id = " . $id;
-    mysqli_query($conn, $sql);
-    $sql = "delete from projetos where id = ?";
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, 'i', $id);
+        // Excluir registros relacionados do projeto em outras tabelas
+        $sql = "DELETE FROM investigadores_projetos WHERE projetos_id = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, 'i', $id);
+        mysqli_stmt_execute($stmt);
+    
+        $sql = "DELETE FROM gestores_projetos WHERE projetos_id = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, 'i', $id);
+        mysqli_stmt_execute($stmt);
+    
+        // Selecionar a fotografia antes de excluir o projeto
+        $sql = "SELECT fotografia FROM projetos WHERE id = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, 'i', $id);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($result);
+        $fotografia = $row["fotografia"];
+    
+        // Excluir o projeto
+        $sql = "DELETE FROM projetos WHERE id = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, 'i', $id);
+
     if (mysqli_stmt_execute($stmt)) {
+        unlink($mainDir.$fotografia);
         header('Location: index.php');
         exit;
     } else {

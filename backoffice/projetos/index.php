@@ -2,11 +2,29 @@
 require "../verifica.php";
 require "../config/basedados.php";
 
-$sql = "SELECT id, nome, referencia, areapreferencial, financiamento, fotografia, concluido FROM projetos ORDER BY nome";
+// Consulta SQL para buscar informações dos projetos e seus investigadores associados
+$sql = "SELECT p.id, p.nome, p.referencia, p.areapreferencial, p.financiamento, p.fotografia, p.concluido,
+               GROUP_CONCAT(DISTINCT i.nome SEPARATOR ', ') AS investigadores
+        FROM projetos p
+        LEFT JOIN investigadores_projetos ip ON p.id = ip.projetos_id
+        LEFT JOIN investigadores i ON ip.investigadores_id = i.id
+        GROUP BY p.id
+        ORDER BY p.nome";
+
 $result = mysqli_query($conn, $sql);
 
-?>
+// Consulta SQL para buscar informações dos projetos e seus gestores associados
+$sql2 = "SELECT p.id, p.nome, p.referencia, p.areapreferencial, p.financiamento, p.fotografia, p.concluido,
+               GROUP_CONCAT(DISTINCT g.nome SEPARATOR ', ') AS gestores
+        FROM projetos p
+        LEFT JOIN gestores_projetos ip ON p.id = ip.projetos_id
+        LEFT JOIN investigadores g ON ip.gestor_id = g.id
+        GROUP BY p.id
+        ORDER BY p.nome";
 
+$result_gestores = mysqli_query($conn, $sql2);
+
+?>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -21,8 +39,8 @@ $result = mysqli_query($conn, $sql);
     ?>
 </style>
 
-<div class="container-xl">
-    <div class="container-xl">
+
+    <div class="px-5">
         <div class="table-responsive">
             <!-- Add search bar here -->
             <div class="input-group mb-3">
@@ -52,6 +70,8 @@ $result = mysqli_query($conn, $sql);
                             <th>TECHN&ART Área Preferencial</th>
                             <th>Financiamento</th>
                             <th>Fotografia</th>
+                            <th>Gestores</th>
+						    <th>Investigadores</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -61,15 +81,23 @@ $result = mysqli_query($conn, $sql);
                             while ($row = mysqli_fetch_assoc($result)) {
                                 echo "<tr>";
                                 echo "<td>" . $row["nome"] . "</td>";
-                                if($row["concluido"]){
-                                    echo "<td>Concluído</td>";
-                                }else{
-                                    echo "<td>Em Curso</td>";
-                                }
+                                echo "<td>" . ($row["concluido"] ? "Concluído" : "Em Curso") . "</td>";
                                 echo "<td>" . $row["referencia"] . "</td>";
                                 echo "<td>" . $row["areapreferencial"] . "</td>";
                                 echo "<td>" . $row["financiamento"] . "</td>";
                                 echo "<td><img src='../assets/projetos/{$row['fotografia']}' width='100px' height='100px'></td>";
+                                // Buscar os gestores correspondentes a este projeto
+                                $gestores = "";
+                                mysqli_data_seek($result_gestores, 0); // Reiniciar o ponteiro do resultado
+                                while ($row_gestores = mysqli_fetch_assoc($result_gestores)) {
+                                    if ($row_gestores["id"] == $row["id"]) {
+                                        $gestores = $row_gestores["gestores"];
+                                        break;
+                                    }
+                                }
+                                echo "<td>" . $gestores . "</td>";
+                                echo "<td>" . $row["investigadores"] . "</td>";
+                                
                                 $sql1 = "SELECT investigadores_id FROM investigadores_projetos WHERE projetos_id = " . $row["id"];
                                 $result1 = mysqli_query($conn, $sql1);
                                 $selected = array();
@@ -91,7 +119,7 @@ $result = mysqli_query($conn, $sql);
             </div>
         </div>
     </div>
-</div>
+
 
 <script>
     $(document).ready(function(){
