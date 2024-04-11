@@ -23,7 +23,6 @@ try {
 } catch (PDOException $e) {
     echo 'Error: ' . $e->getMessage();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -36,12 +35,15 @@ try {
    <div style="background-color: #dbdee1; padding-top: 50px; padding-bottom: 50px;">
       <div class="container">
          <div class="heading_container3">
+
             <h3 style="margin-bottom: 5px;">
                <?= change_lang("projects-ongoing-page-heading") ?>
             </h3>
+
             <h5 class="heading2_h5">
                <?= change_lang("projects-ongoing-page-description") ?>
             </h5>
+
          </div>
       </div>
    </div>
@@ -63,7 +65,7 @@ try {
       </div>
    </form>
    <!-- End of Search Bar -->
-
+  
    <div style="padding-top: 20px;">
       <div class="container">
          <div class="row justify-content-center mt-3">
@@ -87,4 +89,5 @@ try {
 <?= template_footer(); ?>
 
 </body>
+
 </html>
