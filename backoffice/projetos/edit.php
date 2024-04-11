@@ -347,7 +347,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 </div>
 
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Investigadores/as</label><br>
+                                <?php
+                                $sql = "SELECT investigadores_id FROM investigadores_projetos WHERE projetos_id = " . $id;
+                                $result = mysqli_query($conn, $sql);
+                                $selected = array();
+                                if (mysqli_num_rows($result) > 0) {
+                                    while (($row =  mysqli_fetch_assoc($result))) {
+                                        $selected[] = $row['investigadores_id'];
+                                    }
+                                }
+                                $sql = "SELECT id, nome, tipo FROM investigadores 
+                                        ORDER BY CASE WHEN tipo = 'Externo' THEN 1 ELSE 0 END, tipo, nome;";
+                                $result = mysqli_query($conn, $sql);
+                                if (mysqli_num_rows($result) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        if ($row["id"] == $_SESSION["autenticado"]) {
+                                            echo "<input type='hidden' name='investigadores[]' value='" . $row["id"] . "'/>";
+                                        } ?>
+                                        <input type="checkbox" <?= in_array($row["id"], $selected) || $row["id"] == $_SESSION["autenticado"] ? "checked" : "" ?> <?= $row["id"] == $_SESSION["autenticado"] ? "disabled" : "" ?> name="investigadores[]" value="<?= $row["id"] ?>">
+                                        <label><?= $row["tipo"] . " - " .  $row["nome"] ?></label><br>
+                                <?php }
+                                } ?>
+                                <!-- Error -->
+                        </div>
+                    </div>
 
+                <div class="col">
                 <div class="form-group">
                     <label>Investigadores/as</label><br>
                     <?php
@@ -374,7 +403,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <!-- Error -->
 
                 </div>
-
+                </div>
+                </div>
 
                 <div class="form-group">
                     <label>Fotografia</label>
