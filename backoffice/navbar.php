@@ -56,9 +56,15 @@
     <li class="navLi"><a href="../investigadores">Investigadores</a></li>
     <li class="navLi"><a href="../projetos">Projetos</a></li>
     <li class="navLi"><a href="../noticias">Notícias</a></li>
+    <?php
+    // Utilizador tem permissão para aceder ás newsletters
+    if ($_SESSION["autenticado"] == "administrador"){
+        echo "<li class='navLi'><a href='../newsletter'>Newsletter</a></li>";
+    }
+    ?>  
     <li class="navLi"><a href="../oportunidades">Oportunidades</a></li>
     <?php
-    // Utilizador tem permissão para aceder ao administradores
+    // Utilizador tem permissão para aceder ás admisões
     if ($_SESSION["autenticado"] == "administrador") {
         echo "<li class='navLi'><a href='../admissoes'>Admissões</a></li>";
     }
