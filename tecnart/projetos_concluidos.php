@@ -4,8 +4,19 @@ include 'models/functions.php';
 
 $pdo = pdo_connect_mysql();
 $language = ($_SESSION["lang"] == "en") ? "_en" : "";
-$query = "SELECT id,COALESCE(NULLIF(nome{$language}, ''), nome) AS nome,fotografia FROM projetos WHERE concluido=true";
-$stmt = $pdo->prepare($query);
+
+// Check if search query is provided
+$search_query = isset($_GET['search']) ? $_GET['search'] : '';
+
+// Prepare the SQL query based on the search query
+$query = "SELECT id, COALESCE(NULLIF(nome{$language}, ''), nome) AS nome, fotografia FROM projetos WHERE concluido=true";
+if (!empty($search_query)) {
+    $query .= " AND (nome LIKE :search_query)";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindValue(':search_query', '%' . $search_query . '%', PDO::PARAM_STR);
+} else {
+    $stmt = $pdo->prepare($query);
+}
 $stmt->execute();
 $projetos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -14,6 +25,20 @@ $projetos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html>
 
 <?= template_header(change_lang("projects-finished-page-heading")); ?>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<style type="text/css">
+    <?php
+    $css = file_get_contents('../styleBackoffices.css');
+    echo $css;
+    ?>
+</style>
 
 <!-- product section -->
 <section class="product_section layout_padding">
@@ -36,28 +61,41 @@ $projetos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!-- end product section -->
 
 <section class="product_section layout_padding">
-   <div style="padding-top: 20px;">
-      <div class="container">
-         <div class="row justify-content-center mt-3">
-
-            <?php foreach ($projetos as $projeto) : ?>
-
-               <div class="ml-5 imgList">
-                  <a href="projeto.php?projeto=<?= $projeto['id'] ?>">
-                     <div class="image_default">
-                        <img class="centrare" style="object-fit: cover; width:225px; height:280px;" src="../backoffice/assets/projetos/<?= $projeto['fotografia'] ?>" alt="">
-                        <div class="imgText justify-content-center m-auto"><?= $projeto['nome'] ?></div>
-                     </div>
-                  </a>
+   <!-- Search Bar -->
+   <form method="GET" action="projetos_concluidos">"
+      <div class="row justify-content-center">
+         <div class="col-md-6 mb-3">
+            <div class="input-group mb-3">
+               <input type="text" name="search" class="form-control" placeholder="Search projects..." id="searchInput">
+               <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="submit" id="searchButton"><i class="fa fa-search"></i></button>
                </div>
-
-            <?php endforeach; ?>
-
+            </div>
          </div>
+      </div>
+   </form>
+   <!-- End of Search Bar -->
 
+   <div class="row justify-content-center mt-3">
+
+      <?php foreach ($projetos as $projeto) : ?>
+
+      <div class="ml-5 imgList">
+         <a href="projeto.php?projeto=<?= $projeto['id'] ?>">
+            <div class="image_default">
+               <img class="centrare" style="object-fit: cover; width:225px; height:280px;" src="../backoffice/assets/projetos/<?= $projeto['fotografia'] ?>" alt="">
+               <div class="imgText justify-content-center m-auto"><?= $projeto['nome'] ?></div>
+            </div>
+         </a>
       </div>
 
+      <?php endforeach; ?>
+
    </div>
+
+</div>
+
+
 </section>
 
 <!-- end product section -->
