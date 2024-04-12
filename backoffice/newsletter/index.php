@@ -3,7 +3,7 @@
     require "../config/basedados.php";
     require "bloqueador.php";
     //Selecionar os dados das newsletters da base de dados
-    $sql = "SELECT id, titulo, conteudo, data FROM newsletter ORDER BY DATA DESC, titulo";
+    $sql = "SELECT id, titulo, conteudo, data, enviado FROM newsletter ORDER BY DATA DESC, titulo";
     $result = mysqli_query($conn, $sql);
 ?>
 
@@ -19,6 +19,18 @@
 	$css = file_get_contents('../styleBackoffices.css');
 	echo $css;
 	?>
+    .div-textarea {
+		display: block;
+		padding: 5px 10px;
+		border: 1px solid lightgray;
+		resize: vertical;
+		overflow: auto;
+		resize: vertical;
+		font-size: 1rem;
+		font-weight: 400;
+		line-height: 1.5;
+		color: #495057;
+	}
 </style>
 
 <div class="container-xl">
@@ -42,11 +54,32 @@
                         <th>Titulo</th>
                         <th>Conteúdo</th>
                         <th>Data</th>
+                        <th>Estado de Envio</th>
                         <th>Ações</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    
+                    <?php
+                        if (mysqli_num_rows($result) > 0) {
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                echo "<tr>";
+                                echo "<td style='width:250px;'>" . $row["titulo"] . "</td>";
+                                echo "<td style='width:500px; height:100px;'>" . "<div class='div-textarea' style='width:100%; height:100%;'>" . $row["conteudo"] . "</div>" . "</td>";
+                                echo "<td style='width:250px;'>" . $row["data"] . "</td>";
+                                if($row["enviado"] == 0){
+                                    echo "<td><a href='' class='btn btn-info'><span>Enviar</span></a></td>";
+                                } else {
+                                    echo "<td><button href='' class='btn btn-secondary' disabled><span>Enviado</span></button></td>";
+                                }
+                                if ($_SESSION["autenticado"] == "administrador") {
+                                    echo "<td><a href='edit.php?id=" . $row["id"] . "' class='btn btn-primary'><span>Alterar</span></a></td>";
+                                    echo "<td><a href='remove.php?id=" . $row["id"] . "' class='btn btn-danger'><span>Apagar</span></a></td>";
+                                }
+                                echo "</tr>";
+                            }
+                        }
+                    ?>
                 </tbody>
             </table>
         </div>
