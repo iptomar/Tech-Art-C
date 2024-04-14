@@ -127,7 +127,7 @@
     <div class="card">
         <h5 class="card-header text-center">Adicionar Newsletter</h5>
         <div class="card-body">
-            <form role="form" data-toggle="validator" action="create.php" method="post" enctype="multipart/form-data">
+            <form role="form" data-toggle="validator" id="newsletterForm" action="create.php" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label>Data da Newsletter</label>
                     <input type="date" class="form-control" id="inputDate" required name="data" value="<?php echo date('Y-m-d'); ?>">
@@ -139,7 +139,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label>Titulo</label>
-                            <input type="text" minlength="1" require maxlength="100" name="titulo" class="form-control" data-error="Por favor adicione um titulo válido" id="inputTitle" placeholder="Titulo">
+                            <input type="text" minlength="1" required maxlength="100" name="titulo" class="form-control" data-error="Por favor adicione um titulo válido" id="inputTitle" placeholder="Titulo">
                             <!-- Error -->
                             <div class="help-block with-errors"></div>
                         </div>
@@ -175,6 +175,7 @@
 
                 <div class="form-group">
                     <label>Adicionar Noticias</label><br>
+                    <span id="noticiaError" class="alert alert-danger" role="alert" style="display: none;">Por favor, selecione pelo menos uma notícia.</span>
                     <div id="noticiaRow" class="row">
                         <?php
                             $sql = "SELECT id, titulo, imagem, data, enviado FROM noticias  
@@ -257,38 +258,34 @@
             });
         });
 
+        // Iterar cada checkbox
         $('.card').on('click', function() {
             var id = $(this).attr('data-id');
-            console.log('Card ID:', id);
-            if (!id) return; // If no ID is found, exit the function
+            if (!id) return;
             var checkbox = $(this).find('input[type="checkbox"]');
-            checkbox.prop('checked', !checkbox.prop('checked')); // Toggle the checkbox
+            checkbox.prop('checked', !checkbox.prop('checked'));
             var selected = checkbox.prop('checked');
-            console.log('Checkbox Selected:', selected);
+            // Muda o estilo do cartão como tambem mete e retira ids do array
             if (selected) {
-                // If card is selected, add its ID to the array
                 addIdToArray(id);
+                document.getElementById('noticiaError').style.display = 'none';
                 $(this).css({
                     'box-shadow': '0 8px 10px 0 rgba(67, 93, 125, 1)',
                     'border': '1px solid rgba(67, 93, 125, 1)'
-                }); // Add the 'selected-card' class to the clicked card
+                });
                 $(this).find('.list-group-item').addClass('selected');
             } else {
-                // If card is deselected, remove its ID from the array
                 removeIdFromArray(id);
                 $(this).css({
                     'box-shadow': '0 4px 8px 0 rgba(0, 0, 0, 0.2)',
                     'border': 'none',
-                }); // Remove the 'selected-card' class from the clicked card
+                });
                 $(this).find('.list-group-item').removeClass('selected');
             }
-            console.log('Array:', $('#noticiaRow').find('input[type="hidden"]').map(function() {
-                return $(this).val();
-            }).get());
         });
 
+        // Adiciona o id no array
         function addIdToArray(id) {
-            // Add ID to the hidden input array
             $('<input>').attr({
                 type: 'hidden',
                 name: 'noticias[]',
@@ -296,11 +293,25 @@
             }).appendTo('#noticiaRow');
         }
 
+        // Remove o id no array
         function removeIdFromArray(id) {
-            // Remove the hidden input with matching ID
             $('#noticiaRow').find('input[type="hidden"][value="' + id + '"]').remove();
         }
 
+    });
+
+    document.getElementById('newsletterForm').addEventListener('submit', function(event) {
+        var noticias = document.getElementsByName('noticias[]');
+        var selectedCount = 0;
+        for (var i = 0; i < noticias.length; i++) {
+            if (noticias[i].checked) {
+                selectedCount++;
+            }
+        }
+        if (selectedCount === 0) {
+            event.preventDefault(); // Prevent form submission
+            document.getElementById('noticiaError').style.display = 'block'; // Show error message
+        }
     });
     
 
