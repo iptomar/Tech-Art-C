@@ -81,6 +81,12 @@
         vertical-align: top;
         height: fit-content;
     }
+
+    #noticiaRow{
+        height: auto;
+        padding-right: 20px;
+        padding-left: 20px;
+    }
     
     #noticiaCard {
         box-shadow: 0 8px 10px 0 rgba(67, 93, 125, 1);
@@ -108,6 +114,10 @@
 
     #noticiaImagemContainer{
         height: 170px; 
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         overflow: hidden;
     }
     
@@ -115,9 +125,14 @@
         width:100%;
         height: auto;
     }
+
+    #tit {
+        height: 130px;
+        overflow: auto;
+    }
 </style>
 
-<div class="container-xl mt-5">
+<div class="container-xl mt-5 mb-5">
     <div class="card">
         <h5 class="card-header text-center">Remover Newsletter</h5>
         <div class="card-body">
@@ -190,12 +205,6 @@
                                 $counter = 0;
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     $selected[] = $row["enviado"];
-                                    if ($counter % 3 == 0) {
-                                        echo '</div><div class="row">';
-                                    }
-                                    if ($row["id"] == $_SESSION["autenticado"]) {
-                                        echo "<input type='hidden' name='noticias[]' value='" . $row["id"] . "'/>";
-                                    } 
                                     ?>
                                     <div class="col-md-4">
                                         <div id="noticiaCard" class="card" data-id="<?= $row["id"] ?>">
@@ -205,7 +214,7 @@
                                             <!--<img id="noticiaImagem" src="../assets/noticias/<?=$row["imagem"]?>">-->
                                             <div id="noticiaCardContainer" class="container">
                                                 <ul class="list-group list-group-flush">
-                                                    <li class="list-group-item selected"><label>Titulo:</label><br><?= $row["titulo"] ?></li>
+                                                    <li class="list-group-item selected" id="tit"><label>Titulo:</label><br><?= $row["titulo"] ?></li>
                                                     <li class="list-group-item selected">
                                                         <small class="text-muted">
                                                             Data: <?= $row["data"] ?><br>
@@ -219,7 +228,7 @@
                                                             ?>
                                                             <br>
                                                             <label>Adicionado á Newsletter</label>
-                                                            <input type="checkbox" <?= in_array($row["id"], $select) || $row["id"] == $_SESSION["autenticado"] ? "checked" : "" ?> <?= $row["id"] == $_SESSION["autenticado"] ? "disabled" : "" ?> name="noticias[]" value="<?= $row["id"] ?>" disabled>
+                                                            <input type="checkbox" <?= in_array($row["id"], $select) ? "checked" : "" ?> name="noticias[]" value="<?= $row["id"] ?>" disabled>
                                                         </small>
                                                     </li>
                                                 </ul>
@@ -228,6 +237,9 @@
                                     </div>
                                 <?php
                                     $counter++;
+                                    if ($counter % 3 == 0) {
+                                        echo '</div><div id="noticiaRow" class="row">';
+                                    }
                                 }
                             }
                         ?>
