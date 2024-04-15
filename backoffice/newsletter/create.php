@@ -84,11 +84,24 @@
         vertical-align: top;
         height: fit-content;
     }
-    
+
+    #scrolling {
+        height: 1305px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+    #noticiaRow{
+        height: auto;
+        padding-right: 20px;
+        padding-left: 20px;
+    }
+
     #noticiaCard {
         box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
         transition: 0.3s;
-        margin-bottom: 40px
+        margin-bottom: 40px;
+        border: 1px solid rgba(255, 255, 255, 1);
     }
 
     #noticiaCard:hover {
@@ -114,12 +127,21 @@
 
     #noticiaImagemContainer{
         height: 170px; 
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         overflow: hidden;
     }
     
     #noticiaImagem {
-        width:100%;
+        width: 100%;
         height: auto;
+    }
+
+    #tit {
+        height: 130px;
+        overflow: auto;
     }
 </style>
 
@@ -176,58 +198,57 @@
                 <div class="form-group">
                     <label>Adicionar Noticias</label><br>
                     <span id="noticiaError" class="alert alert-danger" role="alert" style="display: none;">Por favor, selecione pelo menos uma notícia.</span>
-                    <div id="noticiaRow" class="row">
-                        <?php
-                            $sql = "SELECT id, titulo, imagem, data, enviado FROM noticias  
-                                ORDER BY data, titulo;";
-                            $result = mysqli_query($conn, $sql);
-                            $selected = array();
-                            $selected2 = array();
-                            if (mysqli_num_rows($result) > 0) {
-                                $counter = 0;
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    $selected[] = $row["enviado"];
-                                    if ($counter % 3 == 0) {
-                                        echo '</div><div class="row">';
-                                    }
-                                    if ($row["id"] == $_SESSION["autenticado"]) {
-                                        echo "<input type='hidden' name='noticias[]' value='" . $row["id"] . "'/>";
-                                    } 
-                                    ?>
-                                    <div class="col-md-4">
-                                        <div id="noticiaCard" class="card" data-id="<?= $row["id"] ?>">
-                                            <div id="noticiaImagemContainer">
-                                                <img id="noticiaImagem" src="../assets/noticias/<?=$row["imagem"]?>">
-                                            </div>
-                                            <!--<img id="noticiaImagem" src="../assets/noticias/<?=$row["imagem"]?>">-->
-                                            <div id="noticiaCardContainer" class="container">
-                                                <ul class="list-group list-group-flush">
-                                                    <li class="list-group-item"><label>Titulo:</label><br><?= $row["titulo"] ?></li>
-                                                    <li class="list-group-item">
-                                                        <small class="text-muted">
-                                                            Data: <?= $row["data"] ?><br>
-                                                            <a style="display: inline;">Enviado?</a>
-                                                            <?php
-                                                                if ($row["enviado"]) {
-                                                                    echo '<a style="color:MediumSeaGreen; margin-bottom:0px;">SIM</a>';
-                                                                } else {
-                                                                    echo '<a style="color:Tomato; margin-bottom:0px;">NÃO</a>';
-                                                                }
-                                                            ?>
-                                                            <br>
-                                                            <label>Adicionado á Newsletter</label>
-                                                            <input type="checkbox" <?= in_array($row["id"], $selected2) || $row["id"] == $_SESSION["autenticado"] ? "checked" : "" ?> <?= $row["id"] == $_SESSION["autenticado"] ? "disabled" : "" ?> name="noticias[]" value="<?= $row["id"] ?>" disabled>
-                                                        </small>
-                                                    </li>
-                                                </ul>
+                    <div id="scrolling">
+                        <div id="noticiaRow" class="row" style="padding-top: 0px">
+                            <?php
+                                $sql = "SELECT id, titulo, imagem, data, enviado FROM noticias  
+                                    ORDER BY data, titulo;";
+                                $result = mysqli_query($conn, $sql);
+                                $selected = array();
+                                $selected2 = array();
+                                if (mysqli_num_rows($result) > 0) {
+                                    $counter = 0;
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        $selected[] = $row["enviado"];
+                                        ?>
+                                        <div class="col-md-4">
+                                            <div id="noticiaCard" class="card" data-id="<?= $row["id"] ?>">
+                                                <div id="noticiaImagemContainer">
+                                                    <img id="noticiaImagem" src="../assets/noticias/<?=$row["imagem"]?>">
+                                                </div>
+                                                <!--<img id="noticiaImagem" src="../assets/noticias/$row["imagem"]">-->
+                                                <div id="noticiaCardContainer" class="container">
+                                                    <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item" id="tit"><label>Titulo:</label><br><?= $row["titulo"] ?></li>
+                                                        <li class="list-group-item">
+                                                            <small class="text-muted">
+                                                                Data: <?= $row["data"] ?><br>
+                                                                <a style="display: inline;">Enviado?</a>
+                                                                <?php
+                                                                    if ($row["enviado"]) {
+                                                                        echo '<a style="color:MediumSeaGreen; margin-bottom:0px;">SIM</a>';
+                                                                    } else {
+                                                                        echo '<a style="color:Tomato; margin-bottom:0px;">NÃO</a>';
+                                                                    }
+                                                                ?>
+                                                                <br>
+                                                                <label>Adicionado á Newsletter</label>
+                                                                <input type="checkbox" <?= in_array($row["id"], $selected2) ? "checked" : "" ?> name="noticias[]" value="<?= $row["id"] ?>" disabled>
+                                                            </small>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                <?php
-                                    $counter++;
+                                    <?php
+                                        $counter++;
+                                        if ($counter % 3 == 0) {
+                                            echo '</div><div id="noticiaRow" class="row">';
+                                        }
+                                    }
                                 }
-                            }
-                        ?>
+                            ?>
+                        </div>
                     </div>
                 </div>
                     
@@ -309,8 +330,8 @@
             }
         }
         if (selectedCount === 0) {
-            event.preventDefault(); // Prevent form submission
-            document.getElementById('noticiaError').style.display = 'block'; // Show error message
+            event.preventDefault();
+            document.getElementById('noticiaError').style.display = 'block';
         }
     });
     

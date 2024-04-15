@@ -51,9 +51,9 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
+                        <th>Data</th>
                         <th>Titulo</th>
                         <th>Conteúdo</th>
-                        <th>Data</th>
                         <th>Estado de Envio</th>
                         <th>Ações</th>
                         <th></th>
@@ -64,9 +64,9 @@
                         if (mysqli_num_rows($result) > 0) {
                             while ($row = mysqli_fetch_assoc($result)) {
                                 echo "<tr>";
+                                echo "<td style='width:250px;'>" . $row["data"] . "</td>";
                                 echo "<td style='width:250px;'>" . $row["titulo"] . "</td>";
                                 echo "<td style='width:500px; height:100px;'>" . "<div class='div-textarea' style='width:100%; height:100%;'>" . $row["conteudo"] . "</div>" . "</td>";
-                                echo "<td style='width:250px;'>" . $row["data"] . "</td>";
                                 if($row["enviado"] == 0){
                                     echo "<td><a href='' class='btn btn-info'><span>Enviar</span></a></td>";
                                 } else {
