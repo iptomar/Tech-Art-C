@@ -85,6 +85,16 @@ function ret_dic_pt(){
         "latest-news-heading" => "ÚLTIMAS NOTÍCIAS",
         //botao 'Ver todas'
         "see-all-btn-latest-news" => "VER TODAS",
+        //titulo 'Newsletter'
+        "newsletter-title" => "SUBSCREVER Á NOSSA NEWSLETTER",
+        //paragrafo da Newsletter
+        "newsletter-p" => "Ao subscrever á nossa newsletter, irá ser notificado das nossas várias notícias.",
+        //input 'Nome'
+        "newsletter-placeholder-name" => "Nome",
+        //input 'Email'
+        "newsletter-placeholder-email" => "Endereço Email",
+        //botao 'Subscrever'
+        "newsletter-subscribe-button" => "Subscrever",
 
         //::::::sobre.php::::::
 

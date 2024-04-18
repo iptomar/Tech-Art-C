@@ -19,6 +19,30 @@ $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html>
 
+<style>
+   form h2 {
+      font-family: 'Quicksand', sans-serif;
+   }
+
+   input[type=text], #newsletterButton {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      display: inline-block;
+      box-sizing: border-box;
+   }
+
+   #newsletterButton {
+      background-color: #333f50;
+      color: white;
+      border: none;
+   }
+
+   #newsletterButton:hover {
+      opacity: 0.8;
+   }
+</style>
+
 <?= template_header('Notícias'); ?>
 
 
@@ -72,6 +96,32 @@ $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
    </div>
 </section>
 
+<!-- newsletter section -->
+<section class="newsletter_section">
+   <div style="background-color: #dbdee1; padding-top: 50px; padding-bottom: 50px;">
+      <div class="section-intro pb-60px">
+         <form>
+            <div class="container">
+               <h2>
+                  <?= change_lang("newsletter-title") ?>
+               </h2>
+               <p><?= change_lang("newsletter-p") ?></p>
+            </div>
+
+            <div class="container" style="background-color:white">
+               <input type="text" placeholder="<?= change_lang("newsletter-placeholder-name") ?>" name="name" required>
+               <input type="text" placeholder="<?= change_lang("newsletter-placeholder-email") ?>" name="mail" required>
+            </div>
+
+            <div class="container" style="padding-left: 0px; padding-right: 0px;">
+               <button id="newsletterButton" type="submit" style="display: inline-block; padding: 5px 25px; background-color:#333F50; border: 2px solid #000000; color: #ffffff; border-radius: 0; 
+                     -webkit-transition: all 0.3s; transition: all 0.3s;  font-family: 'Quicksand', sans-serif;  font-size: 20px;"><?= change_lang("newsletter-subscribe-button") ?></button>
+            </div>
+         </form>
+      </div>
+   </div>
+</section>
+<!-- end newsletter section-->
 
 <?= template_footer(); ?>
 
