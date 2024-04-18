@@ -30,6 +30,20 @@ try {
 
 <?= template_header(change_lang("projects-ongoing-page-heading")); ?>
 
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<style type="text/css">
+    <?php
+    $css = file_get_contents('../styleBackoffices.css');
+    echo $css;
+    ?>
+</style>
+
 <!-- product section -->
 <section class="product_section layout_padding">
    <div style="background-color: #dbdee1; padding-top: 50px; padding-bottom: 50px;">
@@ -56,9 +70,9 @@ try {
       <div class="row justify-content-center">
          <div class="col-md-6 mb-3">
             <div class="input-group mb-3">
-               <input type="text" name="search" class="form-control" placeholder="Search projects..." id="searchInput">
+               <input type="text" name="search" class="form-control" placeholder="Pesquisar por projetos..." id="searchInput">
                <div class="input-group-append">
-                  <button class="btn btn-outline-secondary" type="submit" id="searchButton"><i class="fa fa-search"></i></button>
+                  <button class="btn btn-outline-secondary" type="button" id="searchButton"><i class="fa fa-search"></i></button>
                </div>
             </div>
          </div>
