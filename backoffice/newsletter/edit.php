@@ -108,7 +108,7 @@
     }
 
     #scrolling {
-        height: 1305px;
+        height: 0px;
         overflow-y: scroll;
         overflow-x: hidden;
     }
@@ -300,6 +300,24 @@
 <script src="../ckeditor5/build/ckeditor.js"></script>
 <script>
     $(document).ready(function() {
+
+        // Function to adjust the height of the scrolling container
+        function adjustScrollingHeight() {
+            var rowCount = $('#noticiaRow .col-md-4').length;
+            var height = 0;
+            if (rowCount <= 3) {
+                height = 435; // Height for 3 items
+            } else if (rowCount <= 6) {
+                height = 870; // Height for 6 items
+            } else if (rowCount <= 9 || rowCount >= 9 ) {
+                height = 1305; // Height for 9 items
+            }
+            $('#scrolling').css('height', height + 'px');
+        }
+
+        // Call the function initially
+        adjustScrollingHeight();
+
         $('.ck_replace').each(function() {
             ClassicEditor.create(this, {
                 licenseKey: '',

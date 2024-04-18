@@ -82,6 +82,12 @@
         height: fit-content;
     }
 
+    #scrolling {
+        height: 0px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
     #noticiaRow{
         height: auto;
         padding-right: 20px;
@@ -185,64 +191,66 @@
 
                 <div class="form-group">
                     <label>Noticias da Newsletter</label><br>
-                    <div id="noticiaRow" class="row">
-                        <?php
-                            $sql = "SELECT noticia_id FROM newsletter_noticias WHERE newsletter_id = " . $id;
-                            $result = mysqli_query($conn, $sql);
-                            $select = array();
-                            if (mysqli_num_rows($result) > 0) {
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    $select[] = $row["noticia_id"];
-                                    $noticias[] = $row["noticia_id"];
-                                }
-                            }
-                            $sql = "SELECT n.id, n.titulo, n.imagem, n.data, n.enviado FROM noticias n
-                                JOIN newsletter_noticias nl ON n.id = nl.noticia_id WHERE nl.newsletter_id = $id 
-                                ORDER BY n.data, n.titulo;";
-                            $result = mysqli_query($conn, $sql);
-                            $selected = array();
-                            if (mysqli_num_rows($result) > 0) {
-                                $counter = 0;
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    $selected[] = $row["enviado"];
-                                    ?>
-                                    <div class="col-md-4">
-                                        <div id="noticiaCard" class="card" data-id="<?= $row["id"] ?>">
-                                            <div id="noticiaImagemContainer">
-                                                <img id="noticiaImagem" src="../assets/noticias/<?=$row["imagem"]?>">
-                                            </div>
-                                            <!--<img id="noticiaImagem" src="../assets/noticias/<?=$row["imagem"]?>">-->
-                                            <div id="noticiaCardContainer" class="container">
-                                                <ul class="list-group list-group-flush">
-                                                    <li class="list-group-item selected" id="tit"><label>Titulo:</label><br><?= $row["titulo"] ?></li>
-                                                    <li class="list-group-item selected">
-                                                        <small class="text-muted">
-                                                            Data: <?= $row["data"] ?><br>
-                                                            <a style="display: inline;">Enviado?</a>
-                                                            <?php
-                                                                if ($row["enviado"]) {
-                                                                    echo '<a style="color:MediumSeaGreen; margin-bottom:0px;">SIM</a>';
-                                                                } else {
-                                                                    echo '<a style="color:Tomato; margin-bottom:0px;">NÃO</a>';
-                                                                }
-                                                            ?>
-                                                            <br>
-                                                            <label>Adicionado á Newsletter</label>
-                                                            <input type="checkbox" <?= in_array($row["id"], $select) ? "checked" : "" ?> name="noticias[]" value="<?= $row["id"] ?>" disabled>
-                                                        </small>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php
-                                    $counter++;
-                                    if ($counter % 3 == 0) {
-                                        echo '</div><div id="noticiaRow" class="row">';
+                    <div id="scrolling">
+                        <div id="noticiaRow" class="row">
+                            <?php
+                                $sql = "SELECT noticia_id FROM newsletter_noticias WHERE newsletter_id = " . $id;
+                                $result = mysqli_query($conn, $sql);
+                                $select = array();
+                                if (mysqli_num_rows($result) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        $select[] = $row["noticia_id"];
+                                        $noticias[] = $row["noticia_id"];
                                     }
                                 }
-                            }
-                        ?>
+                                $sql = "SELECT n.id, n.titulo, n.imagem, n.data, n.enviado FROM noticias n
+                                    JOIN newsletter_noticias nl ON n.id = nl.noticia_id WHERE nl.newsletter_id = $id 
+                                    ORDER BY n.data, n.titulo;";
+                                $result = mysqli_query($conn, $sql);
+                                $selected = array();
+                                if (mysqli_num_rows($result) > 0) {
+                                    $counter = 0;
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        $selected[] = $row["enviado"];
+                                        ?>
+                                        <div class="col-md-4">
+                                            <div id="noticiaCard" class="card" data-id="<?= $row["id"] ?>">
+                                                <div id="noticiaImagemContainer">
+                                                    <img id="noticiaImagem" src="../assets/noticias/<?=$row["imagem"]?>">
+                                                </div>
+                                                <!--<img id="noticiaImagem" src="../assets/noticias/<?=$row["imagem"]?>">-->
+                                                <div id="noticiaCardContainer" class="container">
+                                                    <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item selected" id="tit"><label>Titulo:</label><br><?= $row["titulo"] ?></li>
+                                                        <li class="list-group-item selected">
+                                                            <small class="text-muted">
+                                                                Data: <?= $row["data"] ?><br>
+                                                                <a style="display: inline;">Enviado?</a>
+                                                                <?php
+                                                                    if ($row["enviado"]) {
+                                                                        echo '<a style="color:MediumSeaGreen; margin-bottom:0px;">SIM</a>';
+                                                                    } else {
+                                                                        echo '<a style="color:Tomato; margin-bottom:0px;">NÃO</a>';
+                                                                    }
+                                                                ?>
+                                                                <br>
+                                                                <label>Adicionado á Newsletter</label>
+                                                                <input type="checkbox" <?= in_array($row["id"], $select) ? "checked" : "" ?> name="noticias[]" value="<?= $row["id"] ?>" disabled>
+                                                            </small>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php
+                                        $counter++;
+                                        if ($counter % 3 == 0) {
+                                            echo '</div><div id="noticiaRow" class="row">';
+                                        }
+                                    }
+                                }
+                            ?>
+                        </div>
                     </div>
                 </div>
                 
@@ -257,6 +265,27 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function(){
+        // Function to adjust the height of the scrolling container
+        function adjustScrollingHeight() {
+            var rowCount = $('#noticiaRow .col-md-4').length;
+            var height = 0;
+            if (rowCount <= 3) {
+                height = 435; // Height for 3 items
+            } else if (rowCount <= 6) {
+                height = 870; // Height for 6 items
+            } else if (rowCount <= 9 || rowCount >= 9 ) {
+                height = 1305; // Height for 9 items
+            }
+            $('#scrolling').css('height', height + 'px');
+        }
+
+        // Call the function initially
+        adjustScrollingHeight();
+    })
+</script>
 
 <?php
 mysqli_close($conn);
