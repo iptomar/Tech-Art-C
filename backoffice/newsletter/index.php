@@ -31,6 +31,9 @@
 		line-height: 1.5;
 		color: #495057;
 	}
+    .loading-icon {
+        display: none;
+    }
 </style>
 
 <div class="container-xl">
@@ -51,11 +54,11 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th>Data</th>
-                        <th>Titulo</th>
-                        <th>Conteúdo</th>
-                        <th>Estado de Envio</th>
-                        <th>Ações</th>
+                        <th class="col-auto">Data</th>
+                        <th class="col-auto">Titulo</th>
+                        <th class="col-auto">Conteúdo</th>
+                        <th class="col-auto">Estado de Envio</th>
+                        <th class="col-auto">Ações</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -68,7 +71,13 @@
                                 echo "<td style='width:250px;'>" . $row["titulo"] . "</td>";
                                 echo "<td style='width:500px; height:100px;'>" . "<div class='div-textarea' style='width:100%; height:100%;'>" . $row["conteudo"] . "</div>" . "</td>";
                                 if($row["enviado"] == 0){
-                                    echo "<td><a href='sendEmails.php?id=" . $row["id"] . "'class='btn btn-info enviar-email'><span>Enviar</span></a></td>";
+                                    echo "<td>";
+                                    echo "<div class='d-flex align-items-center'>";
+                                    echo "<button href='sendEmails.php?id=" . $row["id"] . "' class='btn btn-info enviar-email'><span>Enviar</span></button>";
+                                    echo "<span class='loading-icon ml-2' style='display: none;'><i class='fa fa-spinner fa-spin'></i></span>";
+                                    echo "</div>";
+                                    echo "</td>";
+
                                 } else {
                                     echo "<td><button href='' class='btn btn-secondary' disabled><span>Enviado</span></button></td>";
                                 }
@@ -91,15 +100,47 @@
     $(document).ready(function(){
         $(".enviar-email").click(function(e){
             e.preventDefault();
+
+            var $button = $(this);
             var url = $(this).attr("href");
+            var $loadingIcon = $(this).siblings('.loading-icon');
+            var $buttonText = $(this).find('span');
+
+            // $(".enviar-email").each(function() {
+            //     if ($(this).find('span').text() !== 'Enviado') {
+            //         $(this).attr('disabled', true);
+            //     }
+            // });
+
+            $loadingIcon.show();
+            $buttonText.text('A enviar...');
+            $button.addClass('btn-secondary').attr('disabled', true);
+            
             $.ajax({
                 url: url,
                 method: 'GET',
-                // success: function(response){
-                //     $("#message").html(response); // Display success or error message
-                // },
+                success: function(response){
+                    //$("#message").html(response); // Display success or error message
+                    $loadingIcon.hide();
+                    $buttonText.text('Enviado');
+                    $button.removeClass('btn-info');
+
+                    // $(".enviar-email").each(function() {
+                    //     if ($(this).find('span').text() !== 'Enviado') {
+                    //         $(this).attr('disabled', false);
+                    //     }
+                    // });
+                },
                 error: function(xhr, status, error){
                     console.error(xhr.responseText);
+                    $loadingIcon.hide();
+                    $buttonText.text('Erro');
+
+                    // $(".enviar-email").each(function() {
+                    //     if ($(this).find('span').text() !== 'Enviado') {
+                    //         $(this).attr('disabled', false);
+                    //     }
+                    // });
                 }
             });
         });
