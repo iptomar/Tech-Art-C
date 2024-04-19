@@ -68,7 +68,7 @@
                                 echo "<td style='width:250px;'>" . $row["titulo"] . "</td>";
                                 echo "<td style='width:500px; height:100px;'>" . "<div class='div-textarea' style='width:100%; height:100%;'>" . $row["conteudo"] . "</div>" . "</td>";
                                 if($row["enviado"] == 0){
-                                    echo "<td><a href='' class='btn btn-info'><span>Enviar</span></a></td>";
+                                    echo "<td><a href='sendEmails.php?id=" . $row["id"] . "'class='btn btn-info enviar-email'><span>Enviar</span></a></td>";
                                 } else {
                                     echo "<td><button href='' class='btn btn-secondary' disabled><span>Enviado</span></button></td>";
                                 }
@@ -84,7 +84,28 @@
             </table>
         </div>
     </div>
+    <!-- <div id="message"></div> -->
 </div>
+
+<script>
+    $(document).ready(function(){
+        $(".enviar-email").click(function(e){
+            e.preventDefault();
+            var url = $(this).attr("href");
+            $.ajax({
+                url: url,
+                method: 'GET',
+                // success: function(response){
+                //     $("#message").html(response); // Display success or error message
+                // },
+                error: function(xhr, status, error){
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
 
 <?php
 mysqli_close($conn);
