@@ -23,6 +23,9 @@
         $sql2 = "SELECT nome, email FROM subscritores WHERE email IS NOT NULL AND email != ''";
         $result2 = mysqli_query($conn, $sql2);
 
+        $sql3 = "UPDATE newsletter SET enviarStatus = 1 WHERE id = $newsletter_id";
+        $result3 = mysqli_query($conn, $sql3);
+
         if(mysqli_num_rows($result2) > 0){
             while($row2 = mysqli_fetch_assoc($result2)){
                 $subcritores[] = $row2;
@@ -51,8 +54,8 @@
             
 
             //Sender
-            $mail->setFrom(USERNAME_SMTP, 'Techn & Art');
-            $mail->addReplyTo(USERNAME_SMTP, 'Information');
+            $mail->setFrom(EMAIL_SMTP, 'Techn & Art');
+            $mail->addReplyTo(EMAIL_SMTP, 'Information');
 
             //Attachments
             //$mail->addAttachment('/var/tmp/file.tar.gz');             //Add attachments
@@ -88,8 +91,10 @@
                 }
             }
 
-            $updateSql = "UPDATE newsletter SET enviado = 1 WHERE id = $newsletter_id";
+            $updateSql = "UPDATE newsletter SET enviarStatus = 0 WHERE id = $newsletter_id";
             mysqli_query($conn, $updateSql);
+            $updateSql2 = "UPDATE newsletter SET enviado = 1 WHERE id = $newsletter_id";
+            mysqli_query($conn, $updateSql2);
 
         } else {
             echo 'Newsletter not found';

@@ -3,7 +3,7 @@
     require "../config/basedados.php";
     require "bloqueador.php";
     //Selecionar os dados das newsletters da base de dados
-    $sql = "SELECT id, titulo, conteudo, data, enviado FROM newsletter ORDER BY DATA DESC, titulo";
+    $sql = "SELECT id, titulo, conteudo, data, enviarStatus, enviado FROM newsletter ORDER BY DATA DESC, titulo";
     $result = mysqli_query($conn, $sql);
 ?>
 
@@ -70,14 +70,20 @@
                                 echo "<td style='width:250px;'>" . $row["data"] . "</td>";
                                 echo "<td style='width:250px;'>" . $row["titulo"] . "</td>";
                                 echo "<td style='width:500px; height:100px;'>" . "<div class='div-textarea' style='width:100%; height:100%;'>" . $row["conteudo"] . "</div>" . "</td>";
-                                if($row["enviado"] == 0){
+                                if($row["enviado"] == 0 && $row["enviarStatus"] == 0){
                                     echo "<td>";
                                     echo "<div class='d-flex align-items-center'>";
                                     echo "<button href='sendEmails.php?id=" . $row["id"] . "' class='btn btn-info enviar-email'><span>Enviar</span></button>";
                                     echo "<span class='loading-icon ml-2' style='display: none;'><i class='fa fa-spinner fa-spin'></i></span>";
                                     echo "</div>";
                                     echo "</td>";
-
+                                } elseif($row["enviarStatus"] == 1){
+                                    echo "<td>";
+                                    echo "<div class='d-flex align-items-center'>";
+                                    echo "<button href='sendEmails.php?id=" . $row["id"] . "' class='btn btn-info enviar-email' disabled><span>A enviar...</span></button>";
+                                    echo "<span class='loading-icon ml-2' style='display: inline;'><i class='fa fa-spinner fa-spin'></i></span>";
+                                    echo "</div>";
+                                    echo "</td>";
                                 } else {
                                     echo "<td><button href='' class='btn btn-secondary' disabled><span>Enviado</span></button></td>";
                                 }
@@ -98,6 +104,28 @@
 
 <script>
     $(document).ready(function(){
+
+        function checkEnviarStatus() {
+            var enviarButtons = $(".enviar-email");
+            var atLeastOneSending = false;
+            enviarButtons.each(function() {
+                var buttonText = $(this).find('span').text().trim();
+                if (buttonText === 'A enviar...') {
+                    atLeastOneSending = true;
+                    return false;
+                }
+            });
+            return atLeastOneSending;
+        }
+
+        function disableEnviarButtons() {
+            if (checkEnviarStatus()) {
+                $(".enviar-email").prop('disabled', true);
+            }
+        }
+
+        disableEnviarButtons();
+
         $(".enviar-email").click(function(e){
             e.preventDefault();
 
@@ -106,11 +134,13 @@
             var $loadingIcon = $(this).siblings('.loading-icon');
             var $buttonText = $(this).find('span');
 
-            // $(".enviar-email").each(function() {
-            //     if ($(this).find('span').text() !== 'Enviado') {
-            //         $(this).attr('disabled', true);
-            //     }
-            // });
+            disableEnviarButtons();
+
+            $(".enviar-email").each(function() {
+                if ($(this).find('span').text() !== 'Enviado') {
+                    $(this).attr('disabled', true);
+                }
+            });
 
             $loadingIcon.show();
             $buttonText.text('A enviar...');
@@ -125,22 +155,15 @@
                     $buttonText.text('Enviado');
                     $button.removeClass('btn-info');
 
-                    // $(".enviar-email").each(function() {
-                    //     if ($(this).find('span').text() !== 'Enviado') {
-                    //         $(this).attr('disabled', false);
-                    //     }
-                    // });
+                    $(".enviar-email").prop('disabled', false);
                 },
                 error: function(xhr, status, error){
+                    //$("#message").html(response); // Display success or error message
                     console.error(xhr.responseText);
                     $loadingIcon.hide();
-                    $buttonText.text('Erro');
+                    $buttonText.text('A enviar...');
 
-                    // $(".enviar-email").each(function() {
-                    //     if ($(this).find('span').text() !== 'Enviado') {
-                    //         $(this).attr('disabled', false);
-                    //     }
-                    // });
+                    $(".enviar-email").prop('disabled', false);
                 }
             });
         });
