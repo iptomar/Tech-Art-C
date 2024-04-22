@@ -96,6 +96,18 @@ function ret_dic_en()
         "newsletter-placeholder-email" => "Email Address",
         //botao 'Subscrever'
         "newsletter-subscribe-button" => "Subscribe",
+        //mensagem 'Sucesso'
+        "newsletter-subscribe-success" => "Success!",
+        //mesagem 'Já existe'
+        "newsletter-subscribe-exists" => "The Email already exists.",
+        //botão 'Cancelar Subscrição'
+        "newsletter-unsubscribe-button" => "Unsubscribe",
+        //etiqueta 'Cancelar Subscrição Sucesso'
+        "newsletter-unsubscribe-redirect" => "Unsubscribed successfully. Redirecting...",
+        //etiqueta 'Token Invalido'
+        "newsletter-unsubscribe-invalid" => "Invalida Token. Redirecting...",
+        //etiqueta 'Falta de Token'
+        "newsletter-unsubscribe-missing" => "Missing token. Redirecting...",
 
         //::::::sobre.php::::::
 

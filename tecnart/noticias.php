@@ -2,6 +2,10 @@
 include 'config/dbconnection.php';
 include 'models/functions.php';
 
+function generateToken($length = 10){
+   return bin2hex(random_bytes($length));
+}
+
 $pdo = pdo_connect_mysql();
 
 $language = ($_SESSION["lang"] == "en") ? "_en" : "";
@@ -14,6 +18,36 @@ $query = "SELECT id,
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+
+   $nome = $_POST["nome"];
+   $email = $_POST["email"];
+
+   //$nome = filter_var($nome, FILTER_SANITIZE_STRING);
+   //$email = filter_var($email, FILTER_SANITIZE_EMAIL);
+
+   $token = generateToken();
+
+   $sqlCheckEmail = "SELECT COUNT(*) AS count FROM subscritores WHERE email = ?";
+   $stmtCheckEmail = $pdo->prepare($sqlCheckEmail);
+   $stmtCheckEmail->execute([$email]);
+   $row = $stmtCheckEmail->fetch(PDO::FETCH_ASSOC);
+   $emailExists = $row['count'] > 0;
+
+   if (!$emailExists) {
+      $sql = "INSERT INTO subscritores (nome, email, token) VALUES (?,?,?)";
+      $stmt = $pdo->prepare($sql);
+      $stmt->execute([$nome, $email, $token]);
+
+      header("Location: noticias.php?success=1");
+      exit();
+   } else {
+
+      echo '<script>alert("'. change_lang("newsletter-subscribe-exists") . '");</script>';
+   }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -28,6 +62,7 @@ $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
       width: 100%;
       padding: 12px;
       margin: 8px 0;
+      text-transform: none;
       display: inline-block;
       box-sizing: border-box;
    }
@@ -100,7 +135,7 @@ $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <section class="newsletter_section">
    <div style="background-color: #dbdee1; padding-top: 50px; padding-bottom: 50px;">
       <div class="section-intro pb-60px">
-         <form>
+         <form action="noticias.php" method="post">
             <div class="container">
                <h2>
                   <?= change_lang("newsletter-title") ?>
@@ -109,8 +144,8 @@ $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
 
             <div class="container" style="background-color:white">
-               <input type="text" placeholder="<?= change_lang("newsletter-placeholder-name") ?>" name="name" required>
-               <input type="text" placeholder="<?= change_lang("newsletter-placeholder-email") ?>" name="mail" required>
+               <input type="text" placeholder="<?= change_lang("newsletter-placeholder-name") ?>" required maxlengh="100" name="nome">
+               <input type="text" placeholder="<?= change_lang("newsletter-placeholder-email") ?>" required maxlengh="100" name="email">
             </div>
 
             <div class="container" style="padding-left: 0px; padding-right: 0px;">
@@ -124,6 +159,10 @@ $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!-- end newsletter section-->
 
 <?= template_footer(); ?>
+
+<?php if(isset($_GET['success']) && $_GET['success'] == 1): ?>
+   <script>alert("<?= change_lang("newsletter-subscribe-success") ?>");</script>
+<?php endif; ?>
 
 </body>
 
