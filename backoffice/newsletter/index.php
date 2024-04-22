@@ -154,16 +154,22 @@
                     $loadingIcon.hide();
                     $buttonText.text('Enviado');
                     $button.removeClass('btn-info');
-
-                    $(".enviar-email").prop('disabled', false);
+                    $(".enviar-email").each(function() {
+                        if ($(this).find('span').text() !== 'Enviado') {
+                            $(this).attr('disabled', false);
+                        }
+                    });
                 },
                 error: function(xhr, status, error){
                     //$("#message").html(response); // Display success or error message
                     console.error(xhr.responseText);
                     $loadingIcon.hide();
                     $buttonText.text('A enviar...');
-
-                    $(".enviar-email").prop('disabled', false);
+                    $(".enviar-email").each(function() {
+                        if ($(this).find('span').text() !== 'Enviado') {
+                            $(this).attr('disabled', false);
+                        }
+                    });
                 }
             });
         });
