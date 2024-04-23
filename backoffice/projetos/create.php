@@ -2,6 +2,8 @@
 require "../verifica.php";
 require "../config/basedados.php";
 
+
+
 $mainDir = "../assets/projetos/";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -77,6 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error: " . $sql . "<br>" . mysqli_error($conn);
     }
 }
+
 ?>
 
 
@@ -127,6 +130,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         display: inline-block;
         vertical-align: top;
         height: fit-content;
+    }
+
+
+    .search-box {
+        margin-bottom: 10px;
+    }
+    .search-box input {
+        width: 100%;
+        padding: 8px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .search-results {
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 5px;
+    }
+    
+    .search-results-gestores {
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 5px;
+    }
+
+    .search-results input[type="checkbox"] {
+        margin-right: 5px;
+    }
+
+    .search-results-gestores input[type="checkbox"] {
+        margin-right: 5px;
     }
 </style>
 
@@ -315,9 +354,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            <label>Investigadores/as</label><br>
+                <div class="col-md-6">
+                    <div class="form-group search-box">
+                        <label for="searchInvestigadores">Pesquisar Investigadores/as</label>
+                      <input type="text" class="form-control" id="searchInvestigadores" placeholder="Pesquisar...">
+                         </div>
+                         <div class="form-group search-results">
                             <?php
                             $sql = "SELECT id, nome, tipo FROM investigadores 
                                 ORDER BY CASE WHEN tipo = 'Externo' THEN 1 ELSE 0 END, tipo, nome;";
@@ -326,16 +368,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 while ($row = mysqli_fetch_assoc($result)) { ?>
                                     <input type="checkbox" name="investigadores[]" value="<?= $row["id"] ?>">
                                     <label><?= $row["tipo"] . " - " .  $row["nome"] ?></label><br>
+                                    
                             <?php }
-                            } ?>
-
+                            }  ?>
+                        
                             <!-- Error -->
                             <div class="help-block with-errors"></div>
                         </div>
+                    
                     </div>
+
                     <div class="col">
-                        <div class="form-group">
-                            <label>Gestores/as</label><br>
+                    <div class="form-group search-box">
+                        <label for="searchGestores">Pesquisar Gestores/as</label>
+                        <input type="text" class="form-control" id="searchGestores" placeholder="Pesquisar...">
+                         </div>
+                         <div class="form-group search-results-gestores">
+                
                             <?php
                             $sql = "SELECT id, nome, tipo FROM investigadores 
                                 ORDER BY CASE WHEN tipo = 'Externo' THEN 1 ELSE 0 END, tipo, nome;";
@@ -389,6 +438,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             });
         });
     });
+
+    $(document).ready(function() {
+    $('#searchInvestigadores').on('input', function() {
+        var searchText = $(this).val().toLowerCase();
+        $('.search-results label').each(function() {
+            var investigadorName = $(this).text().toLowerCase();
+            if (investigadorName.includes(searchText)) {
+                $(this).show(); // Mostra o texto do investigador correspondente
+                $(this).prev('input[type="checkbox"]').show(); // Mostra a checkbox correspondente
+            } else {
+                $(this).hide(); // Esconde o texto do investigador que não corresponde
+                $(this).prev('input[type="checkbox"]').hide(); // Esconde a checkbox que não corresponde
+            }
+        });
+    });
+});
+
+
+$(document).ready(function() {
+        $('#searchGestores').on('input', function() {
+            var searchText = $(this).val().toLowerCase();
+            $('.search-results-gestores label').each(function() {
+                var gestorName = $(this).text().toLowerCase();
+                if (gestorName.includes(searchText)) {
+                    $(this).show(); // Mostra o texto do gestor correspondente
+                    $(this).prev('input[type="checkbox"]').show(); // Mostra a checkbox correspondente
+                } else {
+                    $(this).hide(); // Esconde o texto do gestor que não corresponde
+                    $(this).prev('input[type="checkbox"]').hide(); // Esconde a checkbox que não corresponde
+                }
+            });
+        });
+    });
+
+
+
+
+
 </script>
 
 <?php

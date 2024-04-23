@@ -174,6 +174,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         vertical-align: top;
         height: fit-content;
     }
+  
+    .search-box {
+        margin-bottom: 10px;
+    }
+    .search-box input {
+        width: 100%;
+        padding: 8px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .search-results {
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 5px;
+    }
+    
+    .search-results-gestores {
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 5px;
+    }
+
+    .search-results input[type="checkbox"] {
+        margin-right: 5px;
+    }
+
+    .search-results-gestores input[type="checkbox"] {
+        margin-right: 5px;
+    }
 </style>
 
 <div class="container-xl mt-5">
@@ -365,9 +400,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                     <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label>Investigadores/as</label><br>
+                    <div class="col-md-6">
+                    <div class="form-group search-box">
+                        <label for="searchInvestigadores">Pesquisar Investigadores/as</label>
+                      <input type="text" class="form-control" id="searchInvestigadores" placeholder="Pesquisar...">
+                         </div>
+                         <div class="form-group search-results">
                                 <?php
                                 $sql = "SELECT investigadores_id FROM investigadores_projetos WHERE projetos_id = " . $id;
                                 $result = mysqli_query($conn, $sql);
@@ -392,10 +430,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <!-- Error -->
                         </div>
                     </div>
-
+                                     
                     <div class="col">
-                        <div class="form-group">
-                            <label>Gestores/as</label><br>
+                    <div class="form-group search-box">
+                        <label for="searchGestores">Pesquisar Gestores/as</label>
+                        <input type="text" class="form-control" id="searchGestores" placeholder="Pesquisar...">
+                         </div>
+                         <div class="form-group search-results-gestores">
+                
                             <?php
                             $sql = "SELECT gestor_id FROM gestores_projetos WHERE projetos_id = " . $id;
                             $result = mysqli_query($conn, $sql);
@@ -461,6 +503,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         });
     });
 
+
+
+    $(document).ready(function() {
+    $('#searchInvestigadores').on('input', function() {
+        var searchText = $(this).val().toLowerCase();
+        $('.search-results label').each(function() {
+            var investigadorName = $(this).text().toLowerCase();
+            if (investigadorName.includes(searchText)) {
+                $(this).show(); // Mostra o texto do investigador correspondente
+                $(this).prev('input[type="checkbox"]').show(); // Mostra a checkbox correspondente
+            } else {
+                $(this).hide(); // Esconde o texto do investigador que não corresponde
+                $(this).prev('input[type="checkbox"]').hide(); // Esconde a checkbox que não corresponde
+            }
+        });
+    });
+});
+
+
+$(document).ready(function() {
+        $('#searchGestores').on('input', function() {
+            var searchText = $(this).val().toLowerCase();
+            $('.search-results-gestores label').each(function() {
+                var gestorName = $(this).text().toLowerCase();
+                if (gestorName.includes(searchText)) {
+                    $(this).show(); // Mostra o texto do gestor correspondente
+                    $(this).prev('input[type="checkbox"]').show(); // Mostra a checkbox correspondente
+                } else {
+                    $(this).hide(); // Esconde o texto do gestor que não corresponde
+                    $(this).prev('input[type="checkbox"]').hide(); // Esconde a checkbox que não corresponde
+                }
+            });
+        });
+    });
 
     window.addEventListener('DOMContentLoaded', function() {
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
