@@ -437,7 +437,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <input type="text" class="form-control" id="searchGestores" placeholder="Pesquisar...">
                          </div>
                          <div class="form-group search-results-gestores">
-                
                             <?php
                             $sql = "SELECT gestor_id FROM gestores_projetos WHERE projetos_id = " . $id;
                             $result = mysqli_query($conn, $sql);
