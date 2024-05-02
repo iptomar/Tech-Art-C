@@ -86,6 +86,28 @@ function ret_dic_en()
         "latest-news-heading" => "LATEST NEWS",
         //botao 'Ver todas'
         "see-all-btn-latest-news" => "SEE ALL",
+        //titulo 'Newsletter'
+        "newsletter-title" => "SUBSCRIBE TO OUR NEWSLETTER",
+        //paragrafo da Newsletter
+        "newsletter-p" => "By subscribing to our newsletter, you will be notified of our various news.",
+        //input 'Nome'
+        "newsletter-placeholder-name" => "Name",
+        //input 'Email'
+        "newsletter-placeholder-email" => "Email Address",
+        //botao 'Subscrever'
+        "newsletter-subscribe-button" => "Subscribe",
+        //mensagem 'Sucesso'
+        "newsletter-subscribe-success" => "Success!",
+        //mesagem 'Já existe'
+        "newsletter-subscribe-exists" => "The Email already exists.",
+        //botão 'Cancelar Subscrição'
+        "newsletter-unsubscribe-button" => "Unsubscribe",
+        //etiqueta 'Cancelar Subscrição Sucesso'
+        "newsletter-unsubscribe-redirect" => "Unsubscribed successfully. Redirecting...",
+        //etiqueta 'Token Invalido'
+        "newsletter-unsubscribe-invalid" => "Invalida Token. Redirecting...",
+        //etiqueta 'Falta de Token'
+        "newsletter-unsubscribe-missing" => "Missing token. Redirecting...",
 
         //::::::sobre.php::::::
 

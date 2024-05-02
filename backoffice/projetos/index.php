@@ -2,18 +2,21 @@
 require "../verifica.php";
 require "../config/basedados.php";
 
-// Consulta SQL para buscar informações dos projetos e seus investigadores associados
+// Consulta SQL para buscar informações dos projetos, investigadores e gestores associados
 $sql = "SELECT p.id, p.nome, p.referencia, p.areapreferencial, p.financiamento, p.fotografia, p.concluido,
-               GROUP_CONCAT(DISTINCT i.nome SEPARATOR ', ') AS investigadores
+               GROUP_CONCAT(DISTINCT i.nome SEPARATOR ', ') AS investigadores,
+               GROUP_CONCAT(DISTINCT g.nome SEPARATOR ', ') AS gestores
         FROM projetos p
         LEFT JOIN investigadores_projetos ip ON p.id = ip.projetos_id
         LEFT JOIN investigadores i ON ip.investigadores_id = i.id
+        LEFT JOIN gestores_projetos gp ON p.id = gp.projetos_id
+        LEFT JOIN investigadores g ON gp.gestor_id = g.id
         GROUP BY p.id
         ORDER BY p.nome";
 
 $result = mysqli_query($conn, $sql);
-
 ?>
+
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -32,6 +35,12 @@ $result = mysqli_query($conn, $sql);
 <div class="px-5">
     <div class="table-responsive">
         <!-- Add search bar here -->
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Pesquisar por Projetos, Investigadores ou Gestores..." id="searchInput">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="searchButton"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
         <!-- End of search bar -->
         <div class="table-wrapper">
             <div class="table-title">
@@ -103,17 +112,17 @@ $result = mysqli_query($conn, $sql);
 </div>
 
 <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
         // Function to perform search
         function performSearch() {
             var searchText = $('#searchInput').val().toLowerCase();
-            $('#projectTableBody tr').filter(function(){
+            $('#projectTableBody tr').filter(function() {
                 $(this).toggle($(this).text().toLowerCase().indexOf(searchText) > -1);
             });
         }
 
         // Trigger search on click
-        $('#searchButton').click(function(){
+        $('#searchButton').click(function() {
             performSearch();
         });
 
