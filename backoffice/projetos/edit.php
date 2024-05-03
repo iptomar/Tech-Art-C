@@ -145,6 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 </script>
+
 <style>
     .container {
         max-width: 550px;
@@ -505,23 +506,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     $(document).ready(function() {
-    $('#searchInvestigadores').on('input', function() {
-        var searchText = $(this).val().toLowerCase();
-        $('.search-results label').each(function() {
-            var investigadorName = $(this).text().toLowerCase();
-            if (investigadorName.includes(searchText)) {
-                $(this).show(); // Mostra o texto do investigador correspondente
-                $(this).prev('input[type="checkbox"]').show(); // Mostra a checkbox correspondente
-            } else {
-                $(this).hide(); // Esconde o texto do investigador que não corresponde
-                $(this).prev('input[type="checkbox"]').hide(); // Esconde a checkbox que não corresponde
-            }
+        $('#searchInvestigadores').on('input', function() {
+            var searchText = $(this).val().toLowerCase();
+            $('.search-results label').each(function() {
+                var investigadorName = $(this).text().toLowerCase();
+                if (investigadorName.includes(searchText)) {
+                    $(this).show(); // Mostra o texto do investigador correspondente
+                    $(this).prev('input[type="checkbox"]').show(); // Mostra a checkbox correspondente
+                } else {
+                    $(this).hide(); // Esconde o texto do investigador que não corresponde
+                    $(this).prev('input[type="checkbox"]').hide(); // Esconde a checkbox que não corresponde
+                }
+            });
         });
     });
-});
 
 
-$(document).ready(function() {
+    $(document).ready(function() {
         $('#searchGestores').on('input', function() {
             var searchText = $(this).val().toLowerCase();
             $('.search-results-gestores label').each(function() {
@@ -536,6 +537,7 @@ $(document).ready(function() {
             });
         });
     });
+
 
     window.addEventListener('DOMContentLoaded', function() {
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
