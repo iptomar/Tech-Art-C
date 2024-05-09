@@ -5,25 +5,92 @@ include 'models/functions.php';
 $pdo = pdo_connect_mysql();
 $language = ($_SESSION["lang"] == "en") ? "_en" : "";
 
-// Check if search query is provided
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+$records_per_page = 9;  // You can adjust the number of records per page
+
 $search_query = isset($_GET['search']) ? $_GET['search'] : '';
 
-// Prepare the SQL query based on the search query
-$query = "SELECT id, COALESCE(NULLIF(nome{$language}, ''), nome) AS nome, fotografia FROM projetos WHERE concluido=false";
+// Prepare the SQL query to calculate total number of projects in progress
+$total_query = "SELECT COUNT(*) FROM projetos WHERE concluido=false";
 $params = [];
 if (!empty($search_query)) {
-    $query .= " AND (nome LIKE :search_query)";
+    $total_query .= " AND nome LIKE :search_query";
     $params[':search_query'] = '%' . $search_query . '%';
 }
 
+// Execute total count query
+$total_stmt = $pdo->prepare($total_query);
+$total_stmt->execute($params);
+$total_projects = $total_stmt->fetchColumn();
+$total_pages = ceil($total_projects / $records_per_page);
+
+// Calculate the offset for the current page
+$limit = ($page - 1) * $records_per_page;
+
+// Add limit and offset to the query for in-progress projects
+$query = "SELECT id, COALESCE(NULLIF(nome{$language}, ''), nome) AS nome, fotografia FROM projetos WHERE concluido=false";
+if (!empty($search_query)) {
+    $query .= " AND nome LIKE :search_query";
+}
+$query .= " LIMIT :limit OFFSET :offset";
+
+// Bind parameters for the LIMIT and OFFSET
+$params[':limit'] = $records_per_page;
+$params[':offset'] = $limit;
+
 try {
     $stmt = $pdo->prepare($query);
-    $stmt->execute($params);
+    $stmt->bindValue(':limit', $records_per_page, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $limit, PDO::PARAM_INT);
+
+    if (!empty($search_query)) {
+        $stmt->bindParam(':search_query', $params[':search_query'], PDO::PARAM_STR);
+    }
+    $stmt->execute();
     $projetos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo 'Error: ' . $e->getMessage();
 }
 ?>
+
+
+<style>
+   
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.pagination {
+  display: inline-block;
+}
+
+.pagination-link {
+  display: inline-block;
+  padding: 8px 12px;
+  margin: 0 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.pagination-link.active {
+  background-color: #333F50;
+  color: #fff;
+  border-color: #333F50;
+}
+
+.pagination-link:hover {
+  background-color: #5f728c;
+  color: #fff;
+  border-color: #5f728c;
+}
+
+</style>
 
 <!DOCTYPE html>
 <html>
@@ -85,6 +152,22 @@ try {
 </section>
 
 <!-- end product section -->
+
+<!-- Seção de paginação -->
+<div class="pagination-container">
+    <?php if ($page > 1): ?>
+        <a href="?page=<?= $page - 1 ?>&search=<?= htmlspecialchars($search_query) ?>" class="pagination-link">&laquo; Anterior</a>
+    <?php endif; ?>
+
+    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+        <a href="?page=<?= $i ?>&search=<?= htmlspecialchars($search_query) ?>" class="pagination-link <?= ($page == $i) ? 'active' : '' ?>"><?= $i ?></a>
+    <?php endfor; ?>
+
+    <?php if ($page < $total_pages): ?>
+        <a href="?page=<?= $page + 1 ?>&search=<?= htmlspecialchars($search_query) ?>" class="pagination-link">Seguinte &raquo;</a>
+    <?php endif; ?>
+</div>
+<!-- Fim da seção de paginação -->
 
 <?= template_footer(); ?>
 

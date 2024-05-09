@@ -27,7 +27,7 @@ $total_investigadores_query = "SELECT COUNT(*) AS total FROM investigadores WHER
 $total_stmt = $pdo->query($total_investigadores_query);
 $total_investigadores = $total_stmt->fetch(PDO::FETCH_ASSOC)['total'];
 
-// Calcular o toral de páginas
+// Calcular o total de páginas
 $total_pages = ceil($total_investigadores / $records_per_page);
 
 ?>
