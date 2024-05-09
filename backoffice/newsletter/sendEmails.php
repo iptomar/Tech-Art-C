@@ -46,7 +46,7 @@
             // Preenscer o email com as noticias
             if(mysqli_num_rows($resultNoticias) > 0) {
                 while($rowNoticias = mysqli_fetch_assoc($resultNoticias)) {
-                    $noticiaHtml .= '<td valign="top" width="50%" style="padding-top: 20px; padding-right: 20px;">';
+                    $noticiaHtml .= '<td valign="top" width="50%" style="padding-top: 20px; padding-right: 0px;">';
                     $noticiaHtml .= '<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">';
                     $noticiaHtml .= '<tbody>';
                     $noticiaHtml .= '<tr>';
@@ -67,7 +67,7 @@
                     $noticiaHtml .= '</table>';
                     $noticiaHtml .= '</td>';
                     $counter++;
-                    if($counter % 2 == 0){
+                    if($counter % 1 == 0){
                         $noticiaHtml .= '</tr><tr>';
                     }
                 }
