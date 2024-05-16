@@ -29,9 +29,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
    $token = generateToken();
 
-   $sqlCheckEmail = "SELECT COUNT(*) AS count FROM subscritores WHERE email = ?";
+   $sqlCheckEmail = "SELECT COUNT(*) AS count FROM (
+      SELECT email FROM subscritores WHERE email = ?
+      UNION ALL
+      SELECT email FROM investigadores WHERE email = ?
+      ) AS combined_count;";
    $stmtCheckEmail = $pdo->prepare($sqlCheckEmail);
-   $stmtCheckEmail->execute([$email]);
+   $stmtCheckEmail->execute([$email, $email]);
    $row = $stmtCheckEmail->fetch(PDO::FETCH_ASSOC);
    $emailExists = $row['count'] > 0;
 
