@@ -26,8 +26,31 @@ $total_investigadores = $total_stmt->fetch(PDO::FETCH_ASSOC)['total'];
 // Calcular o toral de páginas
 $total_pages = ceil($total_investigadores / $records_per_page);
 
-?>
 
+
+$params = []; // Inicializa a variável $params
+
+// Check if search query is provided
+$search_query = isset($_GET['search']) ? $_GET['search'] : '';
+
+// Prepare the SQL query based on the search query
+$query = "SELECT id, email, nome, COALESCE(NULLIF(sobre{$language}, ''), sobre) AS sobre, COALESCE(NULLIF(areasdeinteresse{$language}, ''), areasdeinteresse) AS areasdeinteresse, ciencia_id, tipo, fotografia, orcid, scholar, research_gate, scopus_id FROM investigadores WHERE tipo = \"Colaborador\"";
+
+// Add search condition if search query is provided
+if (!empty($search_query)) {
+    $query .= " AND (nome LIKE :search_query)";
+    $params[':search_query'] = '%' . $search_query . '%';
+}
+
+// Order by clause
+$query .= " ORDER BY nome LIMIT $limit, $records_per_page";
+
+// Prepare and execute the SQL query
+$stmt = $pdo->prepare($query);
+$stmt->execute($params);
+$investigadores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+?>
 <style>
    
 .pagination-container {
@@ -90,6 +113,26 @@ $total_pages = ceil($total_investigadores / $records_per_page);
    </div>
 </section>
 <!-- end product section -->
+
+<section class="product_section layout_padding">
+   <!-- Barra de Pesquisa -->
+   <form method="GET" action="colaboradores.php">
+      <div class="row justify-content-center">
+         <div class="col-md-6 mb-3">
+            <div class="input-group mb-3">
+               <input type="text" name="search" class="form-control" placeholder="Pesquisar colaboradores..." id="searchInput">
+               <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="submit" id="searchButton"><i class="fa fa-search"></i></button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </form>
+   <!-- Fim da Barra de Pesquisa -->
+
+
+
+
 
 <section class="product_section layout_padding">
    <div style="padding-top: 20px;">
