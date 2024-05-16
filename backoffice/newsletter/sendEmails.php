@@ -11,6 +11,7 @@
     require '../plugins/PHPMailer/src/SMTP.php';
 
     $subcritores = [];
+    $investigadores = [];
 
     if(isset($_GET['id'])) {
         $newsletter_id = $_GET['id'];
@@ -23,14 +24,21 @@
         JOIN newsletter_noticias nl ON n.id = nl.noticia_id WHERE nl.newsletter_id = $newsletter_id 
         ORDER BY n.data, n.titulo;";
         $resultNoticias = mysqli_query($conn, $sqlNoticias);
-        // Buscar os invesigadores e subscritores da newsletter
-        //SELECT nome, email FROM investigadores WHERE email IS NOT NULL AND email != ''
-        //UNION
+        // Buscar os invesigadores
+        $sql1 = "SELECT nome, email FROM investigadores WHERE email IS NOT NULL AND email != ''";
+        $result1 = mysqli_query($conn, $sql1);
+        // Buscar os subscritores da newsletter
         $sql2 = "SELECT nome, email, token FROM subscritores WHERE email IS NOT NULL AND email != ''";
         $result2 = mysqli_query($conn, $sql2);
         // Atualizar o status de envio da newsletter
         $sql3 = "UPDATE newsletter SET enviarStatus = 1 WHERE id = $newsletter_id";
         $result3 = mysqli_query($conn, $sql3);
+
+        if(mysqli_num_rows($result1) > 0){
+            while($row1 = mysqli_fetch_assoc($result1)){
+                $investigadores[] = $row1;
+            }
+        }
 
         if(mysqli_num_rows($result2) > 0){
             while($row2 = mysqli_fetch_assoc($result2)){
@@ -115,6 +123,36 @@
             $mail->Subject = $row['titulo'];
             //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
+            foreach($investigadores as $inv) {
+                try{
+                    //Recipient
+                    $mail->addAddress($inv['email'], $inv['nome']);     //Add a recipient
+                    //$mail->addAddress('ellen@example.com');           //Name is optional
+                    //$mail->addCC('cc@example.com');
+                    //$mail->addBCC('bcc@example.com');
+
+                    $htmlContentCopy = $htmlContent;
+                    
+                    $htmlContentCopy = str_replace('{{TOKEN}}', '<p><a href="http://www.techneart.ipt.pt/tecnart/index.php" style="color: white; display: none;">Cancelar Subscrição</a></p>', $htmlContentCopy);
+
+                    $mail->Body = $htmlContentCopy;
+
+                    if(!$mail->send()){
+                        file_put_contents('sendEmails.log', gmdate('Y-m-d H:i:s'). "\tEmail not sent to  " . $inv['email'] . ".\n" . PHP_EOL, FILE_APPEND);
+                    } else {
+                        file_put_contents('sendEmails.log', gmdate('Y-m-d H:i:s'). "\tMessage sent to " . $inv['email'] . ".\n" . PHP_EOL, FILE_APPEND);
+                    }
+                    
+                    //Clear address for the next iteration
+                    $mail->clearAllRecipients();
+
+                    $delay = rand(1, 5);
+                    sleep($delay);
+                } catch (Exception $e) {
+                    echo "Message could not be sent to ". $inv['email'] . ". Mailer Error: {$mail->ErrorInfo}\n";
+                }
+            }
+
             foreach($subcritores as $sub) {
                 try{
                     //Recipient
@@ -125,9 +163,10 @@
 
                     $htmlContentCopy = $htmlContent;
                     
-                    $htmlContentCopy = str_replace('{{TOKEN}}', $sub['token'], $htmlContentCopy);
+                    // MUDAR O LINK DEPOIS
+                    $htmlContentCopy = str_replace('{{TOKEN}}', '<p><a href="http://localhost/Tech-Art-C/tecnart/cancelarSubscricao.php?token=' . $sub['token'] . '" style="color: white;">Cancelar Subscrição</a></p>', $htmlContentCopy);
 
-                    $mail->Body    = $htmlContentCopy;
+                    $mail->Body = $htmlContentCopy;
 
                     if(!$mail->send()){
                         file_put_contents('sendEmails.log', gmdate('Y-m-d H:i:s'). "\tEmail not sent to  " . $sub['email'] . ".\n" . PHP_EOL, FILE_APPEND);
