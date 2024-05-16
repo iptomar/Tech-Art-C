@@ -69,9 +69,16 @@ if (@$_SESSION["anoRelatorio"] != "") {
 		</span>
 
 	</form>
-
+<!-- Adicionando a barra de pesquisa -->
+<div class="input-group mt-3">
+            <input type="text" class="form-control" placeholder="Pesquisar por nome, email" id="searchInputSecond">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="searchButtonSecond"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+    </form>
 </div>
-
+</div>
 
 <div class="container-xl">
 	<div class="table-responsive">
@@ -259,4 +266,26 @@ if (@$_SESSION["anoRelatorio"] != "") {
 			});
 		});
 	});
+
+
+    $(document).ready(function() {
+        // Função para realizar a pesquisa
+        function performSearch() {
+            var searchText = $('#searchInputSecond').val().toLowerCase();
+            $('tbody tr').filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(searchText) > -1);
+            });
+        }
+
+        // Acionar a pesquisa ao clicar no botão
+        $('#searchButtonSecond').click(function() {
+            performSearch();
+        });
+
+        // Acionar a pesquisa ao alterar o conteúdo da barra de pesquisa
+        $('#searchInputSecond').on('input', function() {
+            performSearch();
+        });
+    });
+
 </script>

@@ -13,14 +13,36 @@ $records_per_page = 9;
 // Calcular o limite da query 
 $limit = ($page - 1) * $records_per_page;
 
-// Query para buscar os integrados
+// Inicializa a variável $params
+$params = [];
+
+// Check if search query is provided
+$search_query = isset($_GET['search']) ? $_GET['search'] : '';
+
+// Prepare the SQL query based on the search query
 $query = "SELECT id, email, nome, 
             COALESCE(NULLIF(sobre{$language}, ''), sobre) AS sobre, 
-            COALESCE(NULLIF(areasdeinteresse{$language}, ''), areasdeinteresse) 
-            AS areasdeinteresse, ciencia_id, tipo, fotografia, orcid, scholar, research_gate, scopus_id 
-            FROM investigadores WHERE tipo = \"Integrado\" ORDER BY nome LIMIT $limit, $records_per_page";
-$stmt = $pdo->query($query);
-$investigadores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            COALESCE(NULLIF(areasdeinteresse{$language}, ''), areasdeinteresse) AS areasdeinteresse, 
+            ciencia_id, tipo, fotografia, orcid, scholar, research_gate, scopus_id 
+            FROM investigadores WHERE tipo = \"Integrado\"";
+
+// Add search condition if search query is provided
+if (!empty($search_query)) {
+    $query .= " AND (nome LIKE :search_query)";
+    $params[':search_query'] = '%' . $search_query . '%';
+}
+
+// Order by clause
+$query .= " ORDER BY nome LIMIT $limit, $records_per_page";
+
+try {
+    // Prepare and execute the SQL query
+    $stmt = $pdo->prepare($query);
+    $stmt->execute($params);
+    $investigadores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo 'Error: ' . $e->getMessage();
+}
 
 // Buscar o numero total de integrados
 $total_investigadores_query = "SELECT COUNT(*) AS total FROM investigadores WHERE tipo = \"Integrado\"";
@@ -29,7 +51,6 @@ $total_investigadores = $total_stmt->fetch(PDO::FETCH_ASSOC)['total'];
 
 // Calcular o total de páginas
 $total_pages = ceil($total_investigadores / $records_per_page);
-
 ?>
 
 <style>
@@ -96,6 +117,20 @@ $total_pages = ceil($total_investigadores / $records_per_page);
       <!-- end product section -->
 
 <section class="product_section layout_padding">
+   <!-- Barra de Pesquisa -->
+   <form method="GET" action="integrados.php">
+      <div class="row justify-content-center">
+         <div class="col-md-6 mb-3">
+            <div class="input-group mb-3">
+               <input type="text" name="search" class="form-control" placeholder="Pesquisar integrados..." id="searchInput">
+               <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="submit" id="searchButton"><i class="fa fa-search"></i></button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </form>
+   <!-- Fim da Barra de Pesquisa -->
       <div style="padding-top: 20px;">
          <div class="container">
       <div class="row justify-content-center mt-3">

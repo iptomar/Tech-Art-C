@@ -146,6 +146,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     .search-results {
         max-height: 200px;
+        min-height: 200px;
         overflow-y: auto;
         border: 1px solid #ccc;
         border-radius: 4px;
@@ -154,6 +155,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     .search-results-gestores {
         max-height: 200px;
+        min-height: 200px;
         overflow-y: auto;
         border: 1px solid #ccc;
         border-radius: 4px;
@@ -447,9 +449,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (investigadorName.includes(searchText)) {
                 $(this).show(); // Mostra o texto do investigador correspondente
                 $(this).prev('input[type="checkbox"]').show(); // Mostra a checkbox correspondente
+                $(this).next('br').show();
             } else {
                 $(this).hide(); // Esconde o texto do investigador que não corresponde
                 $(this).prev('input[type="checkbox"]').hide(); // Esconde a checkbox que não corresponde
+                $(this).next('br').hide();
             }
         });
     });
@@ -464,9 +468,11 @@ $(document).ready(function() {
                 if (gestorName.includes(searchText)) {
                     $(this).show(); // Mostra o texto do gestor correspondente
                     $(this).prev('input[type="checkbox"]').show(); // Mostra a checkbox correspondente
+                    $(this).next('br').show();
                 } else {
                     $(this).hide(); // Esconde o texto do gestor que não corresponde
                     $(this).prev('input[type="checkbox"]').hide(); // Esconde a checkbox que não corresponde
+                    $(this).next('br').hide();
                 }
             });
         });
