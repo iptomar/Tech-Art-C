@@ -86,7 +86,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 <section class="product_section layout_padding">
-   <div style="background-color: #dbdee1; padding-top: 50px; padding-bottom: 50px;">
+   <div style="background-color:<?= colors("cinzento") ?>; padding-top: 50px; padding-bottom: 50px;">
       <div class="container">
          <div class="heading_container3">
             <h3 style="margin-bottom: 5px;">
@@ -137,7 +137,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!-- newsletter section -->
 <section class="newsletter_section">
-   <div style="background-color: #dbdee1; padding-top: 50px; padding-bottom: 50px;">
+   <div style="background-color:<?= colors("cinzento") ?>; padding-top: 50px; padding-bottom: 50px;">
       <div class="section-intro pb-60px">
          <form action="noticias.php" method="post">
             <div class="container">

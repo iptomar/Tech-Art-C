@@ -488,3 +488,8 @@ function show_error($error)
   </div>
 </div>';
 }
+
+include 'models/palette_cores.php';
+function colors($cor) {
+  return color_palette()[$cor];
+}

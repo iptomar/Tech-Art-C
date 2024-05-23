@@ -34,7 +34,7 @@ include 'models/functions.php';
                             </a>
                         </p>
                         <br>
-                        <a style="display: inline-block; padding: 5px 25px; background-color:#333F50; border: 2px solid #000000; color: #ffffff; border-radius: 0; 
+                        <a style="display: inline-block; padding: 5px 25px; background-color:<?= colors("azul-medio-escuro") ?>; border: 2px solid <?= colors("azul-medio-escuro") ?>; color: #ffffff; border-radius: 0; 
                      -webkit-transition: all 0.3s; transition: all 0.3s;  font-family: 'Quicksand', sans-serif;  font-size: 20px;" href="admissao.php">
                             <?= change_lang("new-admissions-regulations-fill") ?>
                         </a>
