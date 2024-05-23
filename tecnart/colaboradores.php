@@ -96,7 +96,7 @@ $investigadores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <!-- product section -->
 <section class="product_section layout_padding">
-   <div style="background-color: #dbdee1; padding-top: 50px; padding-bottom: 50px;">
+   <div style="background-color:<?= colors("cinzento") ?>; padding-top: 50px; padding-bottom: 50px;">
       <div class="container">
          <div class="heading_container3">
 
