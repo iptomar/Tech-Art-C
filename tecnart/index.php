@@ -22,7 +22,7 @@ $language = ($_SESSION["lang"] == "en") ? "_en" : "";
                <span class="subheading">
                   <?= change_lang("index-first-slide-desc"); ?>
                </span>
-               <div><a href="sobre.php" class="btn btn-primary px-4 py-3 mt-3 btn_no_left">
+               <div><a href="sobre.php" class="btn btn-primary px-4 py-3 mt-3 btn_no_left" style="color:<?= colors("azul-medio-escuro") ?>">
                      <?= change_lang("know-more-btn-txt-slider") ?>
                   </a></div>
             </div>
@@ -43,7 +43,7 @@ $language = ($_SESSION["lang"] == "en") ? "_en" : "";
                <span class="subheading">
                   <?= change_lang("index-second-slide-desc"); ?>
                </span>
-               <div><a href="integrados.php" class="btn btn-primary px-4 py-3 mt-3 btn_no_left">
+               <div><a href="integrados.php" class="btn btn-primary px-4 py-3 mt-3 btn_no_left" style="color:<?= colors("azul-medio-escuro") ?>">
                      <?= change_lang("know-more-btn-txt-slider") ?>
                   </a></div>
             </div>
@@ -63,7 +63,7 @@ $language = ($_SESSION["lang"] == "en") ? "_en" : "";
                <span class="subheading">
                   <?= change_lang("index-third-slide-slider-desc"); ?>
                </span>
-               <div><a href="projetos_em_curso.php" class="btn btn-primary px-4 py-3 mt-3 btn_no_left">
+               <div><a href="projetos_em_curso.php" class="btn btn-primary px-4 py-3 mt-3 btn_no_left" style="color:<?= colors("azul-medio-escuro") ?>">
                      <?= change_lang("know-more-btn-txt-slider") ?>
                   </a></div>
             </div>
@@ -106,7 +106,7 @@ $language = ($_SESSION["lang"] == "en") ? "_en" : "";
                &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
             </h3>
 
-            <a style="display: inline-block; padding: 5px 25px; background-color:#333F50; border: 2px solid #000000; color: #ffffff; border-radius: 0; 
+            <a style="display: inline-block; padding: 5px 25px; background-color:<?= colors("azul-medio-escuro") ?>; border: 2px solid <?= colors("azul-medio-escuro") ?>; color: #ffffff; border-radius: 0; 
                      -webkit-transition: all 0.3s; transition: all 0.3s;  font-family: 'Quicksand', sans-serif;  font-size: 20px;" href="projetos_em_curso.php">
                <?= change_lang("see-all-btn-rd-projects"); ?>
             </a>
@@ -170,7 +170,7 @@ $language = ($_SESSION["lang"] == "en") ? "_en" : "";
    <div style="padding-bottom: 50px;">
       <div class="container">
          <div class="section-intro pb-60px">
-            <h2 style="font-family: 'Quicksand', sans-serif; padding-bottom: 20px; padding-left: 50px;">
+            <h2 style="font-family: 'Quicksand', sans-serif; padding-bottom: 20px; padding-left: 50px; color: <?= colors("azul-medio-escuro") ?>">
                <?= change_lang("latest-news-heading") ?>
             </h2>
          </div>
@@ -231,7 +231,7 @@ $language = ($_SESSION["lang"] == "en") ? "_en" : "";
          </div>
 
          <div class="text-center">
-            <a style="display: inline-block; padding: 5px 25px; background-color:#333F50; border: 2px solid #000000; color: #ffffff; border-radius: 0; 
+            <a style="display: inline-block; padding: 5px 25px; background-color:<?= colors("azul-medio-escuro") ?>; border: 2px solid <?= colors("azul-medio-escuro") ?>; color: #ffffff; border-radius: 0; 
                      -webkit-transition: all 0.3s; transition: all 0.3s;  font-family: 'Quicksand', sans-serif;  font-size: 20px;" href="noticias.php">
                <?= change_lang("see-all-btn-latest-news") ?>
             </a>
