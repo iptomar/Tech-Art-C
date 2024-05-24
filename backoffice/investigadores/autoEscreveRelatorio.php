@@ -1,7 +1,8 @@
 <?php
 
 include "./locaisPortugueses.php";
-include '../../libraries/vendor/phpoffice/phpexcel/Classes/PHPExcel.php';
+include '../../libraries/vendor/autoload.php';
+
 require "../verifica.php";
 require "../config/basedados.php";
 
@@ -103,19 +104,19 @@ $novoRelatorio = "./".strtoupper($lastName)."_".strtolower($firstName)."_".$year
 //::::::::::::ESCREVER NO EXCEL::::::::::::
 
 //tipo de ficheiro
-$inputFileType = PHPExcel_IOFactory::identify($relatorioModelo);
+$inputFileType = \PhpOffice\PhpSpreadsheet\IOFactory::identify($relatorioModelo);
 
 //carregar o  relatorio modelo
-$reader = PHPExcel_IOFactory::createReader($inputFileType);
+$reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($inputFileType);
 $spreadsheet = $reader->load($relatorioModelo);
 
 //escritor de folhas de calculo para o relatorio modelo
-$writer = PHPExcel_IOFactory::createWriter($spreadsheet, $inputFileType);
+$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, $inputFileType);
 
 $spreadsheet->setActiveSheetIndex(0);
-$spreadsheet->getActiveSheet()->getCell('B20')->setValue($nome);
-$spreadsheet->getActiveSheet()->getCell('B22')->setValue($ciencia_id);
-$spreadsheet->getActiveSheet()->getCell('B23')->setValue($orcid);
+$spreadsheet->getActiveSheet()->getCell('B20', true)->setValue($nome);
+$spreadsheet->getActiveSheet()->getCell('B22', true)->setValue($ciencia_id);
+$spreadsheet->getActiveSheet()->getCell('B23', true)->setValue($orcid);
 
 // 2. Projetos de investigação  -------------------------------------------------------------------------------------------- --------------------------------------------------------------------------------------------
 
@@ -144,7 +145,7 @@ foreach($rows as $row){
 
     //letra de comeco
     $startChar = "C";
-    $spreadsheet->getActiveSheet()->getCell($startChar.$startNumber)->setValue($row[1]);    //1 - Indice da coluna com o acronimo
+    $spreadsheet->getActiveSheet()->getCell($startChar.$startNumber, true)->setValue($row[1]);    //1 - Indice da coluna com o acronimo
     $startNumber++;
 }
 
@@ -287,13 +288,13 @@ foreach ($dataArray as $item) {
         //$excelOutCategory = $tipo;
     }
 
-    $spreadsheet->getActiveSheet()->getCell($startChar . $startNumber)->setValue($excelOutCategory);
+    $spreadsheet->getActiveSheet()->getCell($startChar . $startNumber, true)->setValue($excelOutCategory);
 
     //::::::referencia bibliografica::::::
 
     //caracter de comeco
     $startChar = chr(ord($startChar) + 1);
-    $wizard = new PHPExcel_Helper_HTML;
+    $wizard = new \PhpOffice\PhpSpreadsheet\Helper\Html;
 
     //Transformar de HTML para Rich Text
     $richTextAPA = $wizard->toRichTextObject(
@@ -301,7 +302,7 @@ foreach ($dataArray as $item) {
     );
 
     //URL para referencia
-    $spreadsheet->getActiveSheet()->getCell($startChar . $startNumber)->setValue($richTextAPA);
+    $spreadsheet->getActiveSheet()->getCell($startChar . $startNumber, true)->setValue($richTextAPA);
     $spreadsheet->getActiveSheet()->getStyle($startChar . $startNumber)->getAlignment()->setWrapText(true);
 
     //::::::URL, DOI::::::
@@ -318,7 +319,7 @@ foreach ($dataArray as $item) {
     //caracter de comeco
     $startChar = chr(ord($startChar) + 1);
 
-    $spreadsheet->getActiveSheet()->getCell($startChar . $startNumber)->setValue($urlPublic);
+    $spreadsheet->getActiveSheet()->getCell($startChar . $startNumber, true)->setValue($urlPublic);
 
     $startNumber++;
 }
@@ -444,13 +445,13 @@ foreach ($dataArray as $item) {
         continue;
         //$excelOutCategory = $tipo;
     }
-    $spreadsheet->getActiveSheet()->getCell($startChar . $startNumber)->setValue($excelOutCategory);
+    $spreadsheet->getActiveSheet()->getCell($startChar . $startNumber, true)->setValue($excelOutCategory);
 
     //::::::referencia bibliografica::::::
 
     //caracter de comeco
     $startChar = chr(ord($startChar) + 1);
-    $wizard = new PHPExcel_Helper_HTML;
+    $wizard = new \PhpOffice\PhpSpreadsheet\Helper\Html;
 
     //Transformar de HTML para Rich Text
     $richTextAPA = $wizard->toRichTextObject(
@@ -458,13 +459,13 @@ foreach ($dataArray as $item) {
     );
 
     //URL para referencia
-    $spreadsheet->getActiveSheet()->getCell($startChar . $startNumber)->setValue($richTextAPA);
+    $spreadsheet->getActiveSheet()->getCell($startChar . $startNumber, true)->setValue($richTextAPA);
     $spreadsheet->getActiveSheet()->getStyle($startChar . $startNumber)->getAlignment()->setWrapText(true);
 
     //caracter de comeco
     $startChar = chr(ord($startChar) + 1);
 
-    $spreadsheet->getActiveSheet()->getCell($startChar . $startNumber)->setValue($urlPublic);
+    $spreadsheet->getActiveSheet()->getCell($startChar . $startNumber, true)->setValue($urlPublic);
 
     $startNumber++;
 }
@@ -558,13 +559,13 @@ $startNumber = 16;
 
 foreach ($dataArray as $item) {
     $referenceAPA = $item['dados'];
-    $wizard = new PHPExcel_Helper_HTML;
+    $wizard = new \PhpOffice\PhpSpreadsheet\Helper\Html;
     //Transformar de HTML para Rich Text
     $richTextAPA = $wizard->toRichTextObject(
         mb_convert_encoding(html_entity_decode($referenceAPA), 'HTML-ENTITIES', 'UTF-8')
     );
 
-    $spreadsheet->getActiveSheet()->getCell($startChar . $startNumber)->setValue($richTextAPA);
+    $spreadsheet->getActiveSheet()->getCell($startChar . $startNumber, true)->setValue($richTextAPA);
     $startNumber++;
 }
 
@@ -628,7 +629,7 @@ $activePageSelectOptions = array();
 
 for($opc = 1; $opc <= 5; $opc++){
 
-    $activePageSelectOptions[$opc-1] = $spreadsheet->getActiveSheet()->getCell("G".$opc)->getFormattedValue();
+    $activePageSelectOptions[$opc-1] = $spreadsheet->getActiveSheet()->getCell("G".$opc, true)->getFormattedValue();
 
 }
 
@@ -684,7 +685,7 @@ foreach($data->{"service"} as $row){
                 break;
         }
 
-        $spreadsheet->getActiveSheet()->getCell($startChar.$startNumber)->setValue($pageOption);
+        $spreadsheet->getActiveSheet()->getCell($startChar.$startNumber, true)->setValue($pageOption);
 
         //::::::nome do aluno::::::
 
@@ -692,7 +693,7 @@ foreach($data->{"service"} as $row){
 
         $nomeAluno = @$serviceAttr->{"student-name"}->{"value"};
 
-        $spreadsheet->getActiveSheet()->getCell($startChar.$startNumber)->setValue($nomeAluno);
+        $spreadsheet->getActiveSheet()->getCell($startChar.$startNumber, true)->setValue($nomeAluno);
 
         //::::::titulo do projeto::::::
 
@@ -700,7 +701,7 @@ foreach($data->{"service"} as $row){
 
         $tituloProjeto = @$serviceAttr->{"thesis-title"};
 
-        $spreadsheet->getActiveSheet()->getCell($startChar.$startNumber)->setValue($tituloProjeto);
+        $spreadsheet->getActiveSheet()->getCell($startChar.$startNumber, true)->setValue($tituloProjeto);
 
         //::::::instituicao::::::
 
@@ -708,7 +709,7 @@ foreach($data->{"service"} as $row){
 
         $instituicao = @$serviceAttr->{"academic-institutions"}->{"institution"}[0]->{"institution-name"};
 
-        $spreadsheet->getActiveSheet()->getCell($startChar.$startNumber)->setValue($instituicao);
+        $spreadsheet->getActiveSheet()->getCell($startChar.$startNumber, true)->setValue($instituicao);
 
         $startNumber++;
     }
@@ -765,7 +766,7 @@ $activePageSelectOptions = array();
 
 for($opc = 1; $opc <= 3; $opc++){
 
-    $activePageSelectOptions[$opc-1] = $spreadsheet->getActiveSheet()->getCell("C".$opc)->getFormattedValue();
+    $activePageSelectOptions[$opc-1] = $spreadsheet->getActiveSheet()->getCell("C".$opc, true)->getFormattedValue();
 
 }
 
@@ -779,7 +780,7 @@ foreach($data->{"distinction"} as $row){
         //:::categoria do premio:::
         $categoriaPremio = @$row->{"distinction-type"}->{"value"};
 
-        $spreadsheet->getActiveSheet()->getCell($startChar.$startNumber)->setValue($categoriaPremio);
+        $spreadsheet->getActiveSheet()->getCell($startChar.$startNumber, true)->setValue($categoriaPremio);
 
         //:::descricao/nome:::
 
@@ -787,7 +788,7 @@ foreach($data->{"distinction"} as $row){
 
         $descricao = @$row->{"distinction-name"};
 
-        $spreadsheet->getActiveSheet()->getCell($startChar.$startNumber)->setValue($descricao);
+        $spreadsheet->getActiveSheet()->getCell($startChar.$startNumber, true)->setValue($descricao);
 
         $startNumber++;
 
