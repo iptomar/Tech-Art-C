@@ -1,10 +1,10 @@
 {
-    "require": {
-        "phpoffice/phpexcel": "^1.8"
-    },
     "config": {
         "platform": {
-            "php": "5.6"
+            "php": "8.2.12"
         }
+    },
+    "require-dev": {
+        "phpoffice/phpspreadsheet": "^2.1"
     }
 }
