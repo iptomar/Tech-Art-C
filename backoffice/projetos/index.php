@@ -89,12 +89,12 @@ $result = mysqli_query($conn, $sql);
                             echo "<td>" . $gestores . "</td>";
                             echo "<td>" . $row["investigadores"] . "</td>";
 
-                            $sql1 = "SELECT investigadores_id FROM investigadores_projetos WHERE projetos_id = " . $row["id"];
+                            $sql1 = "SELECT gestor_id FROM gestores_projetos WHERE projetos_id = " . $row["id"];
                             $result1 = mysqli_query($conn, $sql1);
                             $selected = array();
                             if (mysqli_num_rows($result1) > 0) {
                                 while (($row1 = mysqli_fetch_assoc($result1))) {
-                                    $selected[] = $row1['investigadores_id'];
+                                    $selected[] = $row1['gestor_id'];
                                 }
                             }
                             if ($_SESSION["autenticado"] == "administrador" || in_array($_SESSION["autenticado"], $selected)) {
