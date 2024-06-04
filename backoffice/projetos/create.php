@@ -67,8 +67,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             $sqlinsert2 = rtrim($sqlinsert2, ",");
             $sql2 = "INSERT INTO gestores_projetos (gestor_id,projetos_id) VALUES" . $sqlinsert2;
+            $sql3 = "INSERT INTO investigadores_projetos (investigadores_id,projetos_id) VALUES" . $sqlinsert2;
             if (!mysqli_query($conn, $sql2)) {
                 echo "Error: " . $sql2 . "<br>" . mysqli_error($conn);
+                exit;
+            }
+            if (!mysqli_query($conn, $sql3)) {
+                echo "Error: " . $sql3 . "<br>" . mysqli_error($conn);
                 exit;
             }
         }

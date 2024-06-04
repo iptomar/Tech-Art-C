@@ -56,6 +56,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     if (mysqli_stmt_execute($stmt)) {
+        if (count($gestores) > 0) {
+            $sqlinsert2 = "";
+            foreach ($gestores as $gestoresid) {
+                $sqlinsert2 = $sqlinsert2 . "($gestoresid,$id),";
+            }
+            $sqlinsert2 = rtrim($sqlinsert2, ",");
+            $sql2 = "DELETE FROM gestores_projetos WHERE projetos_id = " . $id;
+            $sql4 = "DELETE FROM investigadores_projetos WHERE projetos_id = " . $id;
+            mysqli_query($conn, $sql2);
+            mysqli_query($conn, $sql4);
+            $sql2 = "INSERT INTO gestores_projetos (gestor_id,projetos_id) values" . $sqlinsert2;
+            $sql3 = "INSERT INTO investigadores_projetos (investigadores_id,projetos_id) VALUES" . $sqlinsert2;
+            print_r($sql);
+            if (!mysqli_query($conn, $sql2)) {
+                echo "Error: " . $sql2 . "<br>" . mysqli_error($conn);
+                exit;
+            }
+            if (!mysqli_query($conn, $sql3)) {
+                echo "Error: " . $sql3 . "<br>" . mysqli_error($conn);
+                exit;
+            }
+        }
         if (count($investigadores) > 0) {
             $sqlinsert = "";
             foreach ($investigadores as $investigadorid) {
@@ -68,21 +90,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             print_r($sql);
             if (!mysqli_query($conn, $sql)) {
                 echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-                exit;
-            }
-        }
-        if (count($gestores) > 0) {
-            $sqlinsert2 = "";
-            foreach ($gestores as $gestoresid) {
-                $sqlinsert2 = $sqlinsert2 . "($gestoresid,$id),";
-            }
-            $sqlinsert2 = rtrim($sqlinsert2, ",");
-            $sql2 = "DELETE FROM gestores_projetos WHERE projetos_id = " . $id;
-            mysqli_query($conn, $sql2);
-            $sql2 = "INSERT INTO gestores_projetos (gestor_id,projetos_id) values" . $sqlinsert2;
-            print_r($sql);
-            if (!mysqli_query($conn, $sql2)) {
-                echo "Error: " . $sql2 . "<br>" . mysqli_error($conn);
                 exit;
             }
         }
