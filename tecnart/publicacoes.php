@@ -136,8 +136,8 @@ function isYearSelected($year)
             </div>
         </div>
     </div>
+    
+    <div style="height: 500px;"></div>
 </section>
 
 <?= template_footer(); ?>
-
-
