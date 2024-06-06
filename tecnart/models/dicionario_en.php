@@ -22,7 +22,7 @@ function ret_dic_en()
         //Imagem com o logotipo da techn&art
         "header-site-logo" => "./assets/images/TechnArt11FundoTrans.png",
         //Drop-down 'Sobre o Techn&Art'
-        "about-technart-drop-down" => "About Techn&art",
+        "about-technart-drop-down" => "About",
         "mission-and-goals-option" => "Mission and Goals",
         "research-axes-option" => "Research Axes",
         "org-struct-option" => "Organic Structure",
@@ -33,7 +33,7 @@ function ret_dic_en()
         "ongoing-option" => "Ongoing",
         "finished-option" => "Finished",
         //Drop-down 'Investigadores/as'
-        "researchers-drop-down" => "Researchers",
+        "researchers-drop-down" => "Team",
         "integrated-option" => "Integrated",
         "collaborators-option" => "Collaborators",
         "students-option" => "Student Collaborators",

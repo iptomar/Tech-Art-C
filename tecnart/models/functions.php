@@ -245,64 +245,50 @@ $change_lang =  function ($key) {
 
 
     echo <<<EOT
-                <!-- footer start -->
-                <footer>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-4">
-                        <div class="logo_footer" >
-                        <a target="_blank"href="https://www.ipt.pt/"><img height="100" src="./assets/images/IPT_i_1-vertical-branco-img-para-fundo-escuro.png" alt="#" /></a>
-                    </div>
-                        <div class="logo_footer" id="logo4">
-                        <a href="#"><img class="logo-tech_footer" src={$change_lang("footer-site-logo")} alt="#" /></a>
-                        </div>
-                        
-                    </div>
-                        <div class="col-md-8">
-                            <div class="row center_footer">
-                            <div class="col-md-7 center_footer">
-                            <div class="row">
-                                <div class="col-md-6 center_footer">
-                                    <div class="widget_menu">
-                                        <ul>
-                                        <li><a style="color: white;">{$change_lang("address-txt-1")}</a></li>
-                                        <li><a style="color: white;">{$change_lang("address-txt-2")}</a></li>
-                                        <li><a style="color: white;">2300-313 Tomar - Portugal</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                                <div class="widget_menu">
-                                    <br><ul><li><a style="color: white;">sec.techenart@ipt.pt</a></li></ul>
-                                </div>
-                                <div class="widget_menu">
-                                    <br><ul><li><a style="color: white;"><strong>{$change_lang("follow-us-txt")}</strong></a></li></ul>
-                                </div>
-                                <div class="widget_menu">
-                                    <span><a target="_blank"href="https://www.facebook.com/Techn.Art.IPT/"><i id ="fateste" class="fab fa-facebook-f"></i>&nbsp</a></span>
-                                    <span><a target="_blank" style="color: white; font-size: 19px;" href="https://www.youtube.com/channel/UC3w94LwkXczhZ12WYINYKzA"><i class="fab fa-youtube"></i></a></span>
-                                </div>
-                            </div> 
+    <!-- footer start -->
+   
 
-                            <div class="col-md-5 center_footer">
-                            <!-- adicionar margin-left ao logotipo do ipt de forma aos logatipos ficaram alinhados-->
-                            
-                                
-                                <div class="logo_footer">
-                                    <a target="_blank"href="https://www.cienciavitae.pt/"><img height="80" src="./assets/images/cienciavitaeFundoTrans.png" alt="#" /></a>
-                                </div>
-                                <div class="logo_footer">
-                                    <a target="_blank"href="https://www.fct.pt/"><img height="80" src="./assets/images/2022_FCT_Logo_A_horizontal_branco.png" alt="#" /></a>
-                                </div>
-                                <div class="information_f">
-                                    <p style="color: white; font-size: 13px;">{$change_lang("project-ud-txt")}</p>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
+    <footer>
+        <div class="container_footer">
+            <div class="row align-items-center"> <!-- Alteração feita aqui -->
+                <div class="col-md-2"> <!-- Alteração feita aqui -->
+                    <div class="logo_footer" id="logo4">
+                        <a href="#"><img class="logo-tech_footer" src="{$change_lang("footer-site-logo")}" alt="#" /></a>
                     </div>
                 </div>
-                </footer>
+                <div class="col-md-2"> <!-- Alteração feita aqui -->
+                    <div class="logo_footer">
+                        <a target="_blank" href="https://www.ipt.pt/"><img height="100" src="./assets/images/IPT_i_1-vertical-branco-img-para-fundo-escuro.png" alt="#" /></a>
+                    </div>
+                </div>
+                <div class="col-md-2"> <!-- Alteração feita aqui -->
+                    <div class="logo_footer">
+                        <a target="_blank" href="https://www.fct.pt/"><img height="80" src="./assets/images/2022_FCT_Logo_A_horizontal_branco.png" alt="#" /></a>
+                    </div>
+                </div>
+                <div class="col-md-2"> <!-- Alteração feita aqui -->
+                    <div class="logo_footer" style="font-size: 10px">
+                        <ul>
+                            <li><a style="color: white;">{$change_lang("address-txt-1")}</a></li>
+                            <li><a style="color: white;">{$change_lang("address-txt-2")}</a></li>
+                            <li><a style="color: white;">2300-313 Tomar - Portugal</a></li>
+                        </ul>
+                        <ul><li><a style="color: white;">sec.techenart@ipt.pt</a></li></ul>
+                        </div>
+                        </div>
+
+                <div class="col-md-2"> <!-- Alteração feita aqui -->
+                    <div class="logo_footer">
+                      <a style="color: white;"><strong>{$change_lang("follow-us-txt")}</strong></a><br>
+                      <span style="padding: 5px; border-style: solid; border-width: 2px; border-color: white;"><a target="_blank" href="https://www.facebook.com/Techn.Art.IPT/"><i id="fateste" class="fab fa-facebook-f"></i>&nbsp</a></span>
+                      <span style="padding: 5px; border-style: solid; border-width: 2px; border-color: white;"><a target="_blank" style="color: white; font-size: 19px;" href="https://www.youtube.com/channel/UC3w94LwkXczhZ12WYINYKzA"><i class="fab fa-youtube"></i></a></span>
+                    </div>
+                </div>
+              </div>
+                 
+        </div>
+    </footer>
+   
                 <!-- footer end -->
                 <div class="cpy_">
                 <p class="mx-auto" style="font-size: 13px; padding-bottom: 20px;">

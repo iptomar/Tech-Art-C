@@ -15,57 +15,71 @@ $language = ($_SESSION["lang"] == "en") ? "_en" : "";
       <div class="overlay"></div>
       <div class="row no-gutters slider-text justify-content-start" style="position: relative; height: 100%; max-width:100%;" data-scrollax-parent="true">
          <div class="align-text-slider">
-            <div class="col-md-7 mobile_adjust ftco-animate mb-md-5">
-               <h1 class="mb-4">
-                  <?= change_lang("index-first-slide"); ?>
-               </h1>
-               <span class="subheading">
-                  <?= change_lang("index-first-slide-desc"); ?>
-               </span>
-               <div><a href="sobre.php" class="btn btn-primary px-4 py-3 mt-3 btn_no_left" style="color:<?= colors("azul-medio-escuro") ?>">
-                     <?= change_lang("know-more-btn-txt-slider") ?>
-                  </a></div>
+            <div class="container mobile_adjust ftco-animate mb-md-5">
+               <div style="margin-left: 99px">
+                  <h1 class="mb-4">
+                     <?= change_lang("index-first-slide"); ?>
+                  </h1>
+                  <span class="subheading">
+                     <?= change_lang("index-first-slide-desc"); ?>
+                  </span>
+                  <br><br>
+                  <div>
+                     <a href="sobre.php" class="btn btn-primary btn_no_left" style="color:<?= colors("azul-medio-escuro") ?>; border-radius: 0; position: static">
+                        <?= change_lang("know-more-btn-txt-slider") ?>
+                     </a>
+                  </div>
+               </div>
             </div>
          </div>
       </div>
-   </div>
+      </div>
    </div>
 
    <div class="slider-item" style="background-image:url('./assets/images/slider-index-2.jpg');">
       <div class="overlay"></div>
-
       <div class="row no-gutters slider-text justify-content-start" style="position: relative; height: 100%; max-width:100%;" data-scrollax-parent="true">
          <div class="align-text-slider">
-            <div class="col-md-7 mobile_adjust ftco-animate mb-md-5">
+            <div class="container mobile_adjust ftco-animate mb-md-5">
+            <div style="margin-left: 99px">
                <h1 class="mb-4">
                   <?= change_lang("index-second-slide"); ?>
                </h1>
                <span class="subheading">
                   <?= change_lang("index-second-slide-desc"); ?>
                </span>
-               <div><a href="integrados.php" class="btn btn-primary px-4 py-3 mt-3 btn_no_left" style="color:<?= colors("azul-medio-escuro") ?>">
+               <br><br>
+               <div>
+                  <a href="integrados.php" class="btn btn-primary px-4 py-3 mt-3 btn_no_left" style="color:<?= colors("azul-medio-escuro") ?>; border-radius: 0;position: static">
                      <?= change_lang("know-more-btn-txt-slider") ?>
-                  </a></div>
+                  </a>
+               </div>
+            </div>
             </div>
          </div>
       </div>
-   </div>
+      </div>
    </div>
 
    <div class="slider-item" style="background-image:url('./assets/images/slider-index-3.jpg');">
       <div class="overlay"></div>
       <div class="row no-gutters slider-text justify-content-start" style="position: relative; height: 100%; max-width:100%;" data-scrollax-parent="true">
          <div class="align-text-slider">
-            <div class="col-md-7 mobile_adjust ftco-animate mb-md-5">
+            <div class="container mobile_adjust ftco-animate mb-md-5">
+            <div style="margin-left: 99px">
                <h1 class="mb-4">
                   <?= change_lang("index-third-slide-slider"); ?>
                </h1>
-               <span class="subheading">
+               <span class="subheading justified-text">
                   <?= change_lang("index-third-slide-slider-desc"); ?>
                </span>
-               <div><a href="projetos_em_curso.php" class="btn btn-primary px-4 py-3 mt-3 btn_no_left" style="color:<?= colors("azul-medio-escuro") ?>">
+               <br><br>
+               <div>
+                  <a href="projetos_em_curso.php" class="btn btn-primary" style="color:<?= colors("azul-medio-escuro") ?>; border-radius: 0;position: static">
                      <?= change_lang("know-more-btn-txt-slider") ?>
-                  </a></div>
+                  </a>
+               </div>
+            </div>
             </div>
          </div>
       </div>
