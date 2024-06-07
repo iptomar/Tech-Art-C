@@ -865,10 +865,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // Consulta para buscar todas as publicações do investigador
-$sql = "SELECT p.idPublicacao, p.dados, p.visivel, p.tipo, p.data
-        FROM publicacoes p
-        INNER JOIN publicacoes_investigadores pi ON p.idPublicacao = pi.publicacao
-        WHERE pi.investigador = ? ORDER BY p.tipo ASC, p.data DESC";
+$sql = "SELECT idPublicacao, dados, visivel, tipo, data
+FROM (
+    SELECT 
+        p.idPublicacao,
+        p.dados,
+        p.visivel,
+        p.tipo,
+        p.data,
+        ROW_NUMBER() OVER (PARTITION BY SUBSTRING(p.dados, 
+                                                   LOCATE('title = {', p.dados) + 8, 
+                                                   LOCATE('}', p.dados, LOCATE('title = {', p.dados)) - LOCATE('title = {', p.dados) - 8
+                                                  ) 
+                           ORDER BY p.data DESC) AS row_num
+    FROM publicacoes p
+    INNER JOIN publicacoes_investigadores pi ON p.idPublicacao = pi.publicacao
+    WHERE pi.investigador = ?
+) AS subquery
+WHERE row_num = 1
+ORDER BY tipo ASC, data DESC;";
 $stmt = mysqli_prepare($conn, $sql);
 mysqli_stmt_bind_param($stmt, "i", $id);
 mysqli_stmt_execute($stmt);
