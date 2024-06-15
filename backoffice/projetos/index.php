@@ -31,7 +31,6 @@ $result = mysqli_query($conn, $sql);
     ?>
 </style>
 
-
 <div class="px-5">
     <div class="table-responsive">
         <!-- Add search bar here -->
@@ -78,16 +77,24 @@ $result = mysqli_query($conn, $sql);
                             echo "<td>" . $row["areapreferencial"] . "</td>";
                             echo "<td>" . $row["financiamento"] . "</td>";
                             echo "<td><img src='../assets/projetos/{$row['fotografia']}' width='100px' height='100px'></td>";
-                            // Buscar os gestores correspondentes a este projeto
-                            $sql2 = "SELECT GROUP_CONCAT(DISTINCT g.nome SEPARATOR ', ') AS gestores
-                                    FROM gestores_projetos gp
-                                    LEFT JOIN investigadores g ON gp.gestor_id = g.id
-                                    WHERE gp.projetos_id = " . $row["id"];
-                            $result_gestores = mysqli_query($conn, $sql2);
-                            $gestores_row = mysqli_fetch_assoc($result_gestores);
-                            $gestores = $gestores_row["gestores"];
-                            echo "<td>" . $gestores . "</td>";
-                            echo "<td>" . $row["investigadores"] . "</td>";
+                            echo "<td>" . $row["gestores"] . "</td>";
+                            echo "<td>";
+
+                            // Buscar investigadores
+                            $sql_investigadores = "SELECT DISTINCT i.nome 
+                                                   FROM investigadores i
+                                                   LEFT JOIN investigadores_projetos ip ON i.id = ip.investigadores_id
+                                                   LEFT JOIN gestores_projetos gp ON i.id = gp.gestor_id
+                                                   WHERE ip.projetos_id = " . $row["id"] . "
+                                                   OR gp.projetos_id = " . $row["id"];
+                            $result_investigadores = mysqli_query($conn, $sql_investigadores);
+                            $investigadores = array();
+                            while ($row_investigador = mysqli_fetch_assoc($result_investigadores)) {
+                                $investigadores[] = $row_investigador['nome'];
+                            }
+                            echo implode(', ', $investigadores);
+
+                            echo "</td>";
 
                             $sql1 = "SELECT gestor_id FROM gestores_projetos WHERE projetos_id = " . $row["id"];
                             $result1 = mysqli_query($conn, $sql1);

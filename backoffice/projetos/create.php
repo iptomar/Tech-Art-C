@@ -361,53 +361,62 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group search-box">
-                        <label for="searchInvestigadores">Pesquisar Investigadores/as</label>
-                      <input type="text" class="form-control" id="searchInvestigadores" placeholder="Pesquisar...">
-                         </div>
-                         <div class="form-group search-results">
+                    <div class="col-md-6">
+                        <div class="form-group search-box">
+                            <label for="searchInvestigadores">Pesquisar Investigadores/as</label>
+                            <input type="text" class="form-control" id="searchInvestigadores" placeholder="Pesquisar...">
+                        </div>
+                        <div class="form-group search-results">
                             <?php
                             $sql = "SELECT id, nome, tipo FROM investigadores 
-                                ORDER BY CASE WHEN tipo = 'Externo' THEN 1 ELSE 0 END, tipo, nome;";
+                                    ORDER BY CASE WHEN tipo = 'Externo' THEN 1 ELSE 0 END, tipo, nome;";
                             $result = mysqli_query($conn, $sql);
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_assoc($result)) { ?>
-                                    <input type="checkbox" name="investigadores[]" value="<?= $row["id"] ?>">
-                                    <label><?= $row["tipo"] . " - " .  $row["nome"] ?></label><br>
-                                    
+                                    <input type="checkbox" name="investigadores[]" value="<?= $row["id"] ?>" id="investigador_<?= $row["id"] ?>">
+                                    <label><?= $row["tipo"] . " - " .  $row["nome"] ?></label><br>                        
                             <?php }
-                            }  ?>
-                        
+                            } ?>
                             <!-- Error -->
                             <div class="help-block with-errors"></div>
                         </div>
-                    
                     </div>
 
                     <div class="col">
-                    <div class="form-group search-box">
-                        <label for="searchGestores">Pesquisar Gestores/as</label>
-                        <input type="text" class="form-control" id="searchGestores" placeholder="Pesquisar...">
-                         </div>
-                         <div class="form-group search-results-gestores">
-                
+                        <div class="form-group search-box">
+                            <label for="searchGestores">Pesquisar Gestores/as</label>
+                            <input type="text" class="form-control" id="searchGestores" placeholder="Pesquisar...">
+                        </div>
+                        <div class="form-group search-results-gestores">
                             <?php
                             $sql = "SELECT id, nome, tipo FROM investigadores 
-                                ORDER BY CASE WHEN tipo = 'Externo' THEN 1 ELSE 0 END, tipo, nome;";
+                                    ORDER BY CASE WHEN tipo = 'Externo' THEN 1 ELSE 0 END, tipo, nome;";
                             $result = mysqli_query($conn, $sql);
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_assoc($result)) { ?>
-                                    <input type="checkbox" name="gestores[]" value="<?= $row["id"] ?>">
+                                    <input type="checkbox" name="gestores[]" value="<?= $row["id"] ?>" onchange="updateInvestigadores(this)">
                                     <label><?= $row["tipo"] . " - " .  $row["nome"] ?></label><br>
                             <?php }
                             } ?>
-
                             <!-- Error -->
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
                 </div>
+
+                <script>
+                    function updateInvestigadores(gestorCheckbox) {
+                        const investigadorCheckbox = document.getElementById('investigador_' + gestorCheckbox.value);
+                        if (gestorCheckbox.checked) {
+                            investigadorCheckbox.checked = true;
+                            investigadorCheckbox.disabled = true;
+                        } else {
+                            investigadorCheckbox.checked = false;
+                            investigadorCheckbox.disabled = false;
+                        }
+                    }
+                </script>
+
 
                 <div class="form-group">
                     <label>Fotografia</label>

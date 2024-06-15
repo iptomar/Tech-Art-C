@@ -406,53 +406,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 </div>
 
-                    <div class="row">
+                <div class="row">
                     <div class="col-md-6">
-                    <div class="form-group search-box">
-                        <label for="searchInvestigadores">Pesquisar Investigadores/as</label>
-                      <input type="text" class="form-control" id="searchInvestigadores" placeholder="Pesquisar...">
-                         </div>
-                         <div class="form-group search-results">
-                                <?php
-                                $sql = "SELECT investigadores_id FROM investigadores_projetos WHERE projetos_id = " . $id;
-                                $result = mysqli_query($conn, $sql);
-                                $selected = array();
-                                if (mysqli_num_rows($result) > 0) {
-                                    while (($row =  mysqli_fetch_assoc($result))) {
-                                        $selected[] = $row['investigadores_id'];
-                                    }
-                                }
-                                $sql = "SELECT id, nome, tipo FROM investigadores 
-                                        ORDER BY CASE WHEN tipo = 'Externo' THEN 1 ELSE 0 END, tipo, nome;";
-                                $result = mysqli_query($conn, $sql);
-                                if (mysqli_num_rows($result) > 0) {
-                                    while ($row = mysqli_fetch_assoc($result)) {
-                                        if ($row["id"] == $_SESSION["autenticado"]) {
-                                            echo "<input type='hidden' name='investigadores[]' value='" . $row["id"] . "'/>";
-                                        } ?>
-                                        <input type="checkbox" <?= in_array($row["id"], $selected) || $row["id"] == $_SESSION["autenticado"] ? "checked" : "" ?> <?= $row["id"] == $_SESSION["autenticado"] ? "disabled" : "" ?> name="investigadores[]" value="<?= $row["id"] ?>">
-                                        <label><?= $row["tipo"] . " - " .  $row["nome"] ?></label><br>
-                                <?php }
-                                } ?>
-                                <!-- Error -->
+                        <div class="form-group search-box">
+                            <label for="searchInvestigadores">Pesquisar Investigadores/as</label>
+                            <input type="text" class="form-control" id="searchInvestigadores" placeholder="Pesquisar...">
                         </div>
-                    </div>
-                                     
-                    <div class="col">
-                    <div class="form-group search-box">
-                        <label for="searchGestores">Pesquisar Gestores/as</label>
-                        <input type="text" class="form-control" id="searchGestores" placeholder="Pesquisar...">
-                         </div>
-                         <div class="form-group search-results-gestores">
+                        <div class="form-group search-results">
                             <?php
-                            $sql = "SELECT gestor_id FROM gestores_projetos WHERE projetos_id = " . $id;
+                            $sql = "SELECT investigadores_id FROM investigadores_projetos WHERE projetos_id = " . $id;
                             $result = mysqli_query($conn, $sql);
-                            $selected = array();
+                            $selectedInvestigadores = array();
                             if (mysqli_num_rows($result) > 0) {
                                 while (($row =  mysqli_fetch_assoc($result))) {
-                                    $selected[] = $row['gestor_id'];
+                                    $selectedInvestigadores[] = $row['investigadores_id'];
                                 }
                             }
+
+                            $sql = "SELECT gestor_id FROM gestores_projetos WHERE projetos_id = " . $id;
+                            $result = mysqli_query($conn, $sql);
+                            $selectedGestores = array();
+                            if (mysqli_num_rows($result) > 0) {
+                                while (($row =  mysqli_fetch_assoc($result))) {
+                                    $selectedGestores[] = $row['gestor_id'];
+                                }
+                            }
+
+                            $sql = "SELECT id, nome, tipo FROM investigadores 
+                                    ORDER BY CASE WHEN tipo = 'Externo' THEN 1 ELSE 0 END, tipo, nome;";
+                            $result = mysqli_query($conn, $sql);
+                            if (mysqli_num_rows($result) > 0) {
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    if ($row["id"] == $_SESSION["autenticado"]) {
+                                        echo "<input type='hidden' name='investigadores[]' value='" . $row["id"] . "'/>";
+                                    } ?>
+                                    <input type="checkbox" <?= in_array($row["id"], $selectedInvestigadores) || in_array($row["id"], $selectedGestores) || $row["id"] == $_SESSION["autenticado"] ? "checked" : "" ?> <?= $row["id"] == $_SESSION["autenticado"] ? "disabled" : "" ?> name="investigadores[]" value="<?= $row["id"] ?>">
+                                    <label><?= $row["tipo"] . " - " .  $row["nome"] ?></label><br>
+                            <?php }
+                            } ?>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="form-group search-box">
+                            <label for="searchGestores">Pesquisar Gestores/as</label>
+                            <input type="text" class="form-control" id="searchGestores" placeholder="Pesquisar...">
+                        </div>
+                        <div class="form-group search-results-gestores">
+                            <?php
                             $sql = "SELECT id, nome, tipo FROM investigadores 
                                     ORDER BY CASE WHEN tipo = 'Externo' THEN 1 ELSE 0 END, tipo, nome;";
                             $result = mysqli_query($conn, $sql);
@@ -461,15 +462,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     if ($row["id"] == $_SESSION["autenticado"]) {
                                         echo "<input type='hidden' name='gestores[]' value='" . $row["id"] . "'/>";
                                     } ?>
-                                    <input type="checkbox" <?= in_array($row["id"], $selected) || $row["id"] == $_SESSION["autenticado"] ? "checked" : "" ?> <?= $row["id"] == $_SESSION["autenticado"] ? "disabled" : "" ?> name="gestores[]" value="<?= $row["id"] ?>">
+                                    <input type="checkbox" <?= in_array($row["id"], $selectedGestores) || $row["id"] == $_SESSION["autenticado"] ? "checked" : "" ?> <?= $row["id"] == $_SESSION["autenticado"] ? "disabled" : "" ?> name="gestores[]" value="<?= $row["id"] ?>" onchange="updateInvestigadores(this)">
                                     <label><?= $row["tipo"] . " - " .  $row["nome"] ?></label><br>
                             <?php }
                             } ?>
-                            <!-- Error -->
-
                         </div>
                     </div>
                 </div>
+
+                <script>
+                    function updateInvestigadores(gestorCheckbox) {
+                        const investigadorCheckbox = document.querySelector('.search-results input[type="checkbox"][value="' + gestorCheckbox.value + '"]');
+                        if (gestorCheckbox.checked) {
+                            investigadorCheckbox.checked = true;
+                            investigadorCheckbox.disabled = true;
+                        } else {
+                            investigadorCheckbox.checked = false;
+                            investigadorCheckbox.disabled = false;
+                        }
+                    }
+                </script>
+
+            </div>
 
                 <div class="form-group">
                     <label>Fotografia</label>
