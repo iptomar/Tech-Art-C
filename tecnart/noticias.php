@@ -2,7 +2,8 @@
 include 'config/dbconnection.php';
 include 'models/functions.php';
 
-function generateToken($length = 10){
+function generateToken($length = 10)
+{
    return bin2hex(random_bytes($length));
 }
 
@@ -19,7 +20,7 @@ $stmt = $pdo->prepare($query);
 $stmt->execute();
 $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-if($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
    $nome = $_POST["nome"];
    $email = $_POST["email"];
@@ -48,7 +49,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
       exit();
    } else {
 
-      echo '<script>alert("'. change_lang("newsletter-subscribe-exists") . '");</script>';
+      echo '<script>alert("' . change_lang("newsletter-subscribe-exists") . '");</script>';
    }
 }
 
@@ -62,7 +63,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
       font-family: 'Quicksand', sans-serif;
    }
 
-   input[type=text], #newsletterButton {
+   input[type=text],
+   #newsletterButton {
       width: 100%;
       padding: 12px;
       margin: 8px 0;
@@ -111,7 +113,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                <div class="ml-5 imgList">
                   <a href="noticia.php?noticia=<?= $noticia['id'] ?>">
                      <div class="image_default">
-                        <img class="centrare" style="object-fit: cover; width:225px; height:280px;" src="../backoffice/assets/noticias/<?= $noticia['imagem'] ?>" alt="">
+                        <img class="centrare" style="object-fit: cover; width: 250px;px; height: 300px;px;" src="../backoffice/assets/noticias/<?= $noticia['imagem'] ?>" alt="">
                         <div class="imgText justify-content-center m-auto" style="top:75%">
                            <?php
                            $titulo = trim($noticia['titulo']);
@@ -121,12 +123,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                            echo ($titulo !=  trim($noticia['titulo'])) ? $titulo . "..." : $titulo;
                            ?>
                         </div>
-                        <h6 class="imgText m-auto" style="font-size: 11px; font-weight: 100; top:95%"><?= date("d.m.Y", strtotime($noticia['data'])) ?></h6>
                      </div>
                   </a>
+                  <div style="text-align: center; margin-bottom: 40px;">
+                     <hr style="width: 225px; border: 2px solid black;">
+                     <div class="dateText" style=" font-size: 14px; font-weight: bold; color: #333;">
+                        <?= date("d.m.Y", strtotime($noticia['data'])) ?>
+                     </div>
+                  </div>
                </div>
-
             <?php endforeach; ?>
+
 
          </div>
 
@@ -164,8 +171,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <?= template_footer(); ?>
 
-<?php if(isset($_GET['success']) && $_GET['success'] == 1): ?>
-   <script>alert("<?= change_lang("newsletter-subscribe-success") ?>");</script>
+<?php if (isset($_GET['success']) && $_GET['success'] == 1) : ?>
+   <script>
+      alert("<?= change_lang("newsletter-subscribe-success") ?>");
+   </script>
 <?php endif; ?>
 
 </body>
