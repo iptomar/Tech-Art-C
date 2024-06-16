@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 16, 2024 at 06:31 PM
+-- Generation Time: Jun 16, 2024 at 06:36 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -1514,13 +1514,6 @@ CREATE TABLE `subscritores` (
   `email` varchar(100) NOT NULL,
   `token` char(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `subscritores`
---
-
-INSERT INTO `subscritores` (`id`, `nome`, `email`, `token`) VALUES
-(46, 'Dinis Silva', 'dinis685@gmail.com', '23844ff2b9c1f4b6f8cc');
 
 --
 -- Indexes for dumped tables
