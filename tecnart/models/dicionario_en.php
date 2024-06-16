@@ -22,7 +22,7 @@ function ret_dic_en()
         //Imagem com o logotipo da techn&art
         "header-site-logo" => "./assets/images/TechnArt11FundoTrans.png",
         //Drop-down 'Sobre o Techn&Art'
-        "about-technart-drop-down" => "About Techn&art",
+        "about-technart-drop-down" => "About",
         "mission-and-goals-option" => "Mission and Goals",
         "research-axes-option" => "Research Axes",
         "org-struct-option" => "Organic Structure",
@@ -33,7 +33,7 @@ function ret_dic_en()
         "ongoing-option" => "Ongoing",
         "finished-option" => "Finished",
         //Drop-down 'Investigadores/as'
-        "researchers-drop-down" => "Researchers",
+        "researchers-drop-down" => "Team",
         "integrated-option" => "Integrated",
         "collaborators-option" => "Collaborators",
         "students-option" => "Student Collaborators",
@@ -56,10 +56,11 @@ function ret_dic_en()
         //Divisoria com 'projeto UD ...'
         "project-ud-txt" => "Project UD/05488/2020",
         //Etiqueta / texto com 'Instituto Pol...'
-        "ipt-copyright-txt" => "©Polytechnic Institute of Tomar",
+        "ipt-copyright-txt" => "©2024 TECNH&ART-IPT",
         //Etiqueta / texto com 'Todos os direitos reservados'
-        "all-rights-reserved-txt" => "All rights reserved",
-
+        "all-rights-reserved-txt" => "All rights reserved.",
+        //Etiqueta / 'financiado FCT'
+        "FCT" => "Funded by national funds through the FCT - Foundation for Science and Technology, I.P., within the scope of the Strategic Project with the references Project UD/05488/2020.",
         //::::::index.php::::::
 
         //Titulo do 1 slide

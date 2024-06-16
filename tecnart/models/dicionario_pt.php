@@ -21,7 +21,7 @@ function ret_dic_pt(){
         //Imagem com o logotipo da techn&art
         "header-site-logo" => "./assets/images/TechnArt5FundoTrans.png",
         //Drop-down 'Sobre o Techn&Art'
-        "about-technart-drop-down" => "Sobre o Techn&art",
+        "about-technart-drop-down" => "Sobre",
         "mission-and-goals-option" => "Missão e Objetivos",
         "research-axes-option" => "Eixos de Investigação",
         "org-struct-option" => "Estrutura Orgânica",
@@ -32,7 +32,7 @@ function ret_dic_pt(){
         "ongoing-option" => "Em Curso",
         "finished-option" => "Concluídos",
         //Drop-down 'Investigadores/as'
-        "researchers-drop-down" => "Investigadores/as",
+        "researchers-drop-down" => "Equipa",
         "integrated-option" => "Integrados/as",
         "collaborators-option" => "Colaboradores/as",
         "students-option" => "Estudantes Colaboradores/as",
@@ -55,9 +55,12 @@ function ret_dic_pt(){
         //Divisoria com 'projeto UD ...'
         "project-ud-txt" => "Projeto UD/05488/2020",
         //Etiqueta / texto com 'Instituto Pol...'
-        "ipt-copyright-txt" => "©Instituto Politécnico de Tomar",
+        "ipt-copyright-txt" => "©2024 TECNH&ART-IPT",
         //Etiqueta / texto com 'Todos os direitos reservados'
-        "all-rights-reserved-txt" => "Todos os direitos reservados",
+        "all-rights-reserved-txt" => "Todos os direitos reservados.",
+        //Etiqueta / 'financiado FCT'
+        "FCT" => "Financiado por fundos nacionais através da FCT - Fundação para a Ciência e a Tecnologia, I.P., no âmbito do Projeto Estratégico com as referências Projeto UD/05488/2020.",
+        
 
         //::::::index.php::::::
 
