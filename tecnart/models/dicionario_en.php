@@ -56,10 +56,11 @@ function ret_dic_en()
         //Divisoria com 'projeto UD ...'
         "project-ud-txt" => "Project UD/05488/2020",
         //Etiqueta / texto com 'Instituto Pol...'
-        "ipt-copyright-txt" => "©Polytechnic Institute of Tomar",
+        "ipt-copyright-txt" => "©2024 TECNH&ART-IPT",
         //Etiqueta / texto com 'Todos os direitos reservados'
-        "all-rights-reserved-txt" => "All rights reserved",
-
+        "all-rights-reserved-txt" => "All rights reserved.",
+        //Etiqueta / 'financiado FCT'
+        "FCT" => "Funded by national funds through the FCT - Foundation for Science and Technology, I.P., within the scope of the Strategic Project with the references Project UD/05488/2020.",
         //::::::index.php::::::
 
         //Titulo do 1 slide

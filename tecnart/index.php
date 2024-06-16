@@ -120,10 +120,7 @@ $language = ($_SESSION["lang"] == "en") ? "_en" : "";
                &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
             </h3>
 
-            <a style="display: inline-block; padding: 5px 25px; background-color:<?= colors("azul-medio-escuro") ?>; border: 2px solid <?= colors("azul-medio-escuro") ?>; color: #ffffff; border-radius: 0; 
-                     -webkit-transition: all 0.3s; transition: all 0.3s;  font-family: 'Quicksand', sans-serif;  font-size: 20px;" href="projetos_em_curso.php">
-               <?= change_lang("see-all-btn-rd-projects"); ?>
-            </a>
+           
 
          </div>
          <div class="row">
@@ -164,15 +161,21 @@ $language = ($_SESSION["lang"] == "en") ? "_en" : "";
                      </div>
                   </div>
                </div>
+               
             <?php
             }
 
             ?>
-
-
+           
 
 
          </div>
+         <div class="text-center">
+ <a style="display: inline-block; padding: 5px 25px; background-color:<?= colors("azul-medio-escuro") ?>; border: 2px solid <?= colors("azul-medio-escuro") ?>; color: #ffffff; border-radius: 0; 
+                     -webkit-transition: all 0.3s; transition: all 0.3s;  font-family: 'Merriweather Sans', sans-serif;  font-size: 21px;" href="projetos_em_curso.php">
+               <?= change_lang("see-all-btn-rd-projects"); ?>
+            </a>
+            </div>
       </div>
    </div>
 </section>
@@ -188,8 +191,7 @@ $language = ($_SESSION["lang"] == "en") ? "_en" : "";
                <?= change_lang("latest-news-heading") ?>
             </h2>
          </div>
-
-         <div class="owl-carousel owl-theme" id="bestSellerCarousel">
+         <div class="owl-carousel owl-theme owl-nav" id="bestSellerCarousel">
             <?php
             $pdo = pdo_connect_mysql();
             //Selecionar no máximo 6 notícias, ordenadas pela data mais recente, e que tenham data anterior ou igual à atual
@@ -246,7 +248,7 @@ $language = ($_SESSION["lang"] == "en") ? "_en" : "";
 
          <div class="text-center">
             <a style="display: inline-block; padding: 5px 25px; background-color:<?= colors("azul-medio-escuro") ?>; border: 2px solid <?= colors("azul-medio-escuro") ?>; color: #ffffff; border-radius: 0; 
-                     -webkit-transition: all 0.3s; transition: all 0.3s;  font-family: 'Quicksand', sans-serif;  font-size: 20px;" href="noticias.php">
+                     -webkit-transition: all 0.3s; transition: all 0.3s;  font-family: 'Merriweather Sans', sans-serif;  font-size: 21px;" href="noticias.php">
                <?= change_lang("see-all-btn-latest-news") ?>
             </a>
          </div>

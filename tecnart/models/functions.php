@@ -246,8 +246,7 @@ $change_lang =  function ($key) {
 
     echo <<<EOT
     <!-- footer start -->
-   
-
+ 
     <footer>
         <div class="container_footer">
             <div class="row align-items-center"> <!-- Alteração feita aqui -->
@@ -291,9 +290,12 @@ $change_lang =  function ($key) {
    
                 <!-- footer end -->
                 <div class="cpy_">
+                
                 <p class="mx-auto" style="font-size: 13px; padding-bottom: 20px;">
-                {$change_lang("ipt-copyright-txt")} | {$change_lang("all-rights-reserved-txt")} | 
-                <a style="font-size: 13px;" href="copyright.php">{$change_lang("copyright-title")}</a> 
+                {$change_lang("FCT")} <br>
+                {$change_lang("ipt-copyright-txt")} | {$change_lang("all-rights-reserved-txt")} 
+                 
+               
                 <br></p>
                 </div>
 
@@ -429,7 +431,7 @@ $change_lang =  function ($key) {
                   document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
                 }
             */
-            
+  
               </script>
 
               <!--<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>-->

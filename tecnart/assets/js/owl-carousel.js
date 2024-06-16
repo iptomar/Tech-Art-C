@@ -2961,7 +2961,7 @@
 	 * @todo Rename `slideBy` to `navBy`
 	 */
 	Navigation.Defaults = {
-		nav: false,
+		nav: true,
 		navText: [
 			'<span aria-label="' + 'Previous' + '">&#x2039;</span>',
 			'<span aria-label="' + 'Next' + '">&#x203a;</span>'
@@ -3445,4 +3445,6 @@
 		$.support.transform3d = tests.csstransforms3d();
 	}
 
+
+	
 })(window.Zepto || window.jQuery, window, document);
